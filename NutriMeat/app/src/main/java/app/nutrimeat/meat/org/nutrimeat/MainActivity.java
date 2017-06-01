@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
     LoginButton loginButton;
     TextView welcome, forgot;
 
-    Button login_manual, signup_manual, skip;
+    Button login_manual, signup_manual;
 
     EditText email, password;
     private String full_name, email_id;
@@ -257,7 +257,6 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
 
         login_manual = (Button) findViewById(R.id.login);
         signup_manual = (Button) findViewById(R.id.name);
-        skip = (Button) findViewById(R.id.skip);
 
         login_manual.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
             }
         });
 
-        skip.setOnClickListener(new View.OnClickListener() {
+        /*skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // skip continue as guest
@@ -288,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
 
 
             }
-        });
+        });*/
 
         forgot = (TextView) findViewById(R.id.forgotpassword);
         forgot.setOnClickListener(new View.OnClickListener() {
