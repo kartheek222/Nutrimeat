@@ -21,8 +21,6 @@ import java.util.ArrayList;
 
 import app.nutrimeat.meat.org.nutrimeat.Account.AcountFragment;
 import app.nutrimeat.meat.org.nutrimeat.Home.HomeFragment;
-import app.nutrimeat.meat.org.nutrimeat.Recipies.RecipiesFragment;
-import app.nutrimeat.meat.org.nutrimeat.WatsCooking.WatsCookingFragment;
 import app.nutrimeat.meat.org.nutrimeat.drawer.BulkOrder;
 import app.nutrimeat.meat.org.nutrimeat.drawer.ContactUs;
 import app.nutrimeat.meat.org.nutrimeat.product.Products;
@@ -128,14 +126,14 @@ public class Navdrawer extends AppCompatActivity
                 fragment = ProductsFragment.newInstance();
                 title = "Products";
                 break;
-            case R.id.nav_wc:
+           /* case R.id.nav_wc:
                 fragment = new WatsCookingFragment();
                 title = "What's Cooking";
                 break;
             case R.id.nav_recipes:
                 fragment = new RecipiesFragment();
                 title = "Recipies";
-                break;
+                break;*/
             case R.id.nav_youraccount:
                 fragment = new AcountFragment();
                 title = "Account";

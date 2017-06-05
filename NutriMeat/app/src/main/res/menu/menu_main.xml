@@ -6,6 +6,7 @@
         android:id="@+id/action_filter"
         android:orderInCategory="100"
         app:showAsAction="always"
+        android:visible="false"
         android:icon="@drawable/filter"
         android:title="Refresh"/>
     <item

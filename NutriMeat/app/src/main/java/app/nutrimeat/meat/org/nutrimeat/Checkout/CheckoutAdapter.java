@@ -32,6 +32,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Produc
     private int rowLayout;
     private CheckoutActivity context;
     ArrayList<ModelCart> listofProdcuts = new ArrayList<>();
+    private double sub_total = 0;
 
     public CheckoutAdapter(ArrayList<ModelCart> listofProdcuts, int checkout_item, CheckoutActivity checkoutActivity) {
         this.listofProdcuts = listofProdcuts;
@@ -121,13 +122,14 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Produc
     }
 
     private void setPrice() {
-        double sub_total = 0;
         for (int i = 0; i < context.price.size(); i++) {
             sub_total += context.price.get(i);
-
         }
         context.subtotal.setText(String.valueOf(sub_total));
+    }
 
+    public double getSub_total() {
+        return sub_total;
     }
 
     @Override

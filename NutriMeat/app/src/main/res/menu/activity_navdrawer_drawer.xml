@@ -13,7 +13,7 @@
             android:id="@+id/products"/>
 
 
-        <item
+      <!--  <item
             android:id="@+id/nav_wc"
             android:icon="@drawable/pot_mix"
             android:title="What's Cooking" />
@@ -21,7 +21,7 @@
             android:id="@+id/nav_recipes"
             android:icon="@drawable/ic_recipies"
             android:title="Recipes" />
-
+-->
         <item android:title="Account">
             <menu>
                 <group android:checkableBehavior="single">
