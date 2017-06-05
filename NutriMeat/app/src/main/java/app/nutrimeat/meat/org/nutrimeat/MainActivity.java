@@ -429,6 +429,10 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
                         Toast.makeText(getApplicationContext(), response1.getError(), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "User Login Successful", Toast.LENGTH_SHORT).show();
+                        prefManager.setIsGuestLogin(true);
+                        Intent intent = new Intent(MainActivity.this, Navdrawer.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                     }
                 }
 

@@ -12,6 +12,11 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    repositories {
+        maven {
+            url  "https://dl.bintray.com/sasidhar-678/maven"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -39,6 +44,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.makeramen:roundedimageview:2.2.1'
     compile 'pub.devrel:easypermissions:0.3.0'
+    compile 'com.sasidhar.smaps.payumoney:payumoney:0.0.3'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

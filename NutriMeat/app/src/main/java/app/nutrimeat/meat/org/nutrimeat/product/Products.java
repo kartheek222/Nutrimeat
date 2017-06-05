@@ -32,11 +32,11 @@ import retrofit2.Response;
 import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PRODUCT_CART;
 
 
-
 public class Products extends Fragment {
 
     private TextView txtViewCount;
     private ProgressBar progressBar;
+
     public Products() {
         // Required empty public constructor
     }
@@ -55,7 +55,7 @@ public class Products extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //returning our layout file
-        View rootview = inflater.inflate(R.layout.fragment_menu_products, container, false);
+        View rootview = inflater.inflate(R.layout.fragment_menu_products_specific, container, false);
         progressBar = (ProgressBar) rootview.findViewById(R.id.progressBar);
         setHasOptionsMenu(true);
         String cat = getArguments().getString("cat");
@@ -138,7 +138,7 @@ public class Products extends Fragment {
     }
 
     public void updateHotCount(List<ModelCart> selc_products) {
-        if(selc_products!=null) {
+        if (selc_products != null) {
             final int count = selc_products.size();
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -157,14 +157,14 @@ public class Products extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("I'm Back","first");
+        Log.e("I'm Back", "first");
         if (requestCode == 1) {
-            Log.e("I'm Back","secound");
+            Log.e("I'm Back", "secound");
             if (resultCode == Activity.RESULT_OK) {
                 List<ModelCart> isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PRODUCT_CART);
                 updateHotCount(isadd_to_cart);
                 adapter.notifyDataSetChanged();
-                Log.e("I'm Back","third");
+                Log.e("I'm Back", "third");
             }
         }
     }
