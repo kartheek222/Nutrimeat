@@ -20,9 +20,9 @@ import com.sasidhar.smaps.payumoney.Utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import app.nutrimeat.meat.org.nutrimeat.CommonFunctions;
+import app.nutrimeat.meat.org.nutrimeat.PrefManager;
 import app.nutrimeat.meat.org.nutrimeat.R;
 import app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_mbold;
 import app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_regular;
@@ -111,24 +111,25 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void navigateUserToPayment(List<ModelCart> cart_itens) {
+        PrefManager manager = new PrefManager(this);
         HashMap params = new HashMap<>();
         params.put(PayUMoney_Constants.KEY, "m3pWGL"); // Get merchant key from PayU Money Account
-        params.put(PayUMoney_Constants.TXN_ID, UUID.randomUUID().toString());
+        params.put(PayUMoney_Constants.TXN_ID, "sfsfsfassfsf" + System.currentTimeMillis());
         params.put(PayUMoney_Constants.AMOUNT, checkoutAdapter.getSub_total());
         params.put(PayUMoney_Constants.PRODUCT_INFO, "product_info");
         params.put(PayUMoney_Constants.FIRST_NAME, "first_name");
-        params.put(PayUMoney_Constants.EMAIL, "email");
-        params.put(PayUMoney_Constants.PHONE, "phone_number");
-        params.put(PayUMoney_Constants.SURL, "success_url");
-        params.put(PayUMoney_Constants.FURL, "failure_url");
+        params.put(PayUMoney_Constants.EMAIL, "kartheek@gmail.com");
+        params.put(PayUMoney_Constants.PHONE, manager.getMobile());
+        params.put(PayUMoney_Constants.SURL, "http://www.nutrimeat.in/store/checkout_complete");
+        params.put(PayUMoney_Constants.FURL, "http://www.nutrimeat.in/store/checkout_complete");
 
 
 // User defined fields are optional (pass empty string)
-        /*params.put(PayUMoney_Constants.UDF1, "");
+        params.put(PayUMoney_Constants.UDF1, "");
         params.put(PayUMoney_Constants.UDF2, "");
         params.put(PayUMoney_Constants.UDF3, "");
         params.put(PayUMoney_Constants.UDF4, "");
-        params.put(PayUMoney_Constants.UDF5, "");*/
+        params.put(PayUMoney_Constants.UDF5, "");
 
 
 // generate hash by passing params and salt

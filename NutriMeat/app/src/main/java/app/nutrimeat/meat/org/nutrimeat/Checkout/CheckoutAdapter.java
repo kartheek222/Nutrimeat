@@ -28,7 +28,6 @@ import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PRODUCT_CART;
 
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ProductViewHolder> {
 
-
     private int rowLayout;
     private CheckoutActivity context;
     ArrayList<ModelCart> listofProdcuts = new ArrayList<>();
@@ -59,7 +58,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Produc
     }
 
     @Override
-    public CheckoutAdapter.ProductViewHolder onCreateViewHolder(ViewGroup parent,
+    public ProductViewHolder onCreateViewHolder(ViewGroup parent,
                                                                 int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
         return new ProductViewHolder(view);
@@ -122,6 +121,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Produc
     }
 
     private void setPrice() {
+        sub_total = 0;
         for (int i = 0; i < context.price.size(); i++) {
             sub_total += context.price.get(i);
         }

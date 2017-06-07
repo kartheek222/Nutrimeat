@@ -25,7 +25,7 @@ public class Recipes extends Fragment implements View.OnClickListener {
         //change R.layout.yourlayoutfilename for each of your fragments
         View view = inflater.inflate(R.layout.recipes_sample, container, false);
         ViewPager viewpager = (ViewPager) view.findViewById(R.id.viewPager);
-        viewpager.setAdapter(new HomePagerAdapter());
+        viewpager.setAdapter(new HomePagerAdapter(getChildFragmentManager()));
         view.findViewById(R.id.tvProducts).setOnClickListener(this);
         view.findViewById(R.id.tvRecipies).setOnClickListener(this);
         view.findViewById(R.id.tvWhatsCooking).setOnClickListener(this);

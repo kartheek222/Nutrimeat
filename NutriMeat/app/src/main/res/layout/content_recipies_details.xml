@@ -14,11 +14,11 @@
         android:orientation="vertical">
 
         <app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_bold
+            android:id="@+id/product_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:gravity="center"
-            android:id="@+id/product_name"
             android:text="Preparation Time"
             android:textColor="#7D9C34"
             android:textSize="21sp" />
@@ -45,8 +45,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Preparation Time"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/colorAccent"
+                    android:textSize="12sp" />
 
                 <app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_regular
                     android:id="@+id/time_pre"
@@ -69,9 +69,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Serving"
-                    android:textSize="12sp"
+                    android:textColor="@color/colorAccent"
 
-                    android:textColor="@color/colorAccent" />
+                    android:textSize="12sp" />
 
                 <app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_regular
                     android:id="@+id/serving"
@@ -93,8 +93,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Calories"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/colorAccent"
+                    android:textSize="12sp" />
 
                 <app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_regular
 
@@ -120,16 +120,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/text_margin"
             android:layout_marginLeft="@dimen/text_margin"
-            android:layout_marginRight="@dimen/text_margin"
-
-            />
+            android:layout_marginRight="@dimen/text_margin" />
 
         <app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_mbold
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/activity_horizontal_margin"
             android:text="Directions:"
-
             android:textColor="@color/black" />
 
         <app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_regular
@@ -138,9 +135,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/text_margin"
             android:layout_marginLeft="@dimen/text_margin"
-            android:layout_marginRight="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin" />
 
-            />
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

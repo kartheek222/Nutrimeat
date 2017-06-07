@@ -167,7 +167,7 @@ public class WatsCookingFragment extends Fragment {
                 updateshared(get_model);
                 Intent intent = new Intent(getActivity(), Navdrawer.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("ids", R.id.products);
+                intent.putExtra("ids", R.id.home);
                 getActivity().startActivityForResult(intent, 1);
             }
 

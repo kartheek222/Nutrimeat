@@ -96,7 +96,8 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
 
             Intent intent = new Intent(MainActivity.this, Navdrawer.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);        }
+            startActivity(intent);
+        }
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
         welcome = (TextView) findViewById(R.id.welcome);
@@ -144,10 +145,11 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
                                     CheckUser checkUser = new CheckUser();
                                     checkUser.setEmail(prefManager.getEmail());
                                     Call<ServerResponse> responseCall = api.checkuser(checkUser);
+//                                    progressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Validating Password...", true, false);
                                     responseCall.enqueue(new Callback<ServerResponse>() {
                                         @Override
                                         public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-
+//                                            progressDialog.dismiss();
                                             int statusCode = response.code();
                                             ServerResponse response1 = response.body();
                                             Log.d("CheckUser_response", "onResponse: " + statusCode);
@@ -157,7 +159,8 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
                                                 prefManager.setFirstTimeLaunch(false);
                                                 Intent intent = new Intent(MainActivity.this, Navdrawer.class);
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(intent);                                            } else {
+                                                startActivity(intent);
+                                            } else {
                                                 //REGISTER ( launch mobile number dialog and then register
                                                 LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
                                                 View mView = layoutInflater.inflate(R.layout.custom, null);
@@ -175,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
                                                                 Log.d("FB_EMAIL", prefManager.getEmail());
                                                                 Log.d("FB_MOBILE", prefManager.getMobile());
                                                                 registerUser(prefManager.getName(), prefManager.getEmail(), prefManager.getMobile());
-
                                                             }
                                                         });
                                                 AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
@@ -421,15 +423,21 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
                 public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                     int statusCode = response.code();
                     ServerResponse response1 = response.body();
-                    Log.d("RESPONSE_Login", "onResponse: " + statusCode);
+                    Log.d("RESPONSE_Login", "onResponse:  status code" + statusCode);
+                    Log.d("RESPONSE_Login", "onResponse: response  " + response1);
                     Log.d("Status", response1.getStatus());
                     progressDialog.dismiss();
                     if (response1.getStatus().equalsIgnoreCase("failed")) {
                         Log.d("ERROR", response1.getError());
                         Toast.makeText(getApplicationContext(), response1.getError(), Toast.LENGTH_SHORT).show();
                     } else {
+                        String input = email.getText().toString();
+                        if (input.contains("@")) {
+                            prefManager.setEmail(input);
+                        } else {
+                            prefManager.setMobile(input);
+                        }
                         Toast.makeText(getApplicationContext(), "User Login Successful", Toast.LENGTH_SHORT).show();
-                        prefManager.setIsGuestLogin(true);
                         Intent intent = new Intent(MainActivity.this, Navdrawer.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
@@ -596,10 +604,12 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
         request.setEmail(email_id);
         request.setMobile(mobile);
         Call<ServerResponse> responseCall = api.getrespone(request);
+//        progressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Registering Account", true, false);
         responseCall.enqueue(new Callback<ServerResponse>() {
             @Override
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                 int statusCode = response.code();
+//                progressDialog.dismiss();
                 ServerResponse response1 = response.body();
                 Log.d("Response_register", "onResponse: " + statusCode);
                 Log.d("Status", response1.getStatus());

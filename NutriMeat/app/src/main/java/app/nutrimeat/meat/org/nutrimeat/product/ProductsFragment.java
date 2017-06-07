@@ -2,6 +2,7 @@ package app.nutrimeat.meat.org.nutrimeat.product;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -35,6 +36,8 @@ public class ProductsFragment extends Fragment {
         View rootview = inflater.inflate(R.layout.fragment_menu_products, container, false);
 //        setHasOptionsMenu(true);
         ViewPager viewPager = (ViewPager) rootview.findViewById(R.id.pager);
+        TabLayout tabLayout = (TabLayout) rootview.findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
         viewPager.setAdapter(new ProductsPagerAdapter(getChildFragmentManager()));
         return rootview;
     }

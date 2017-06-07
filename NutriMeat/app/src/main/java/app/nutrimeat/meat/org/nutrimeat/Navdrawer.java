@@ -24,7 +24,6 @@ import app.nutrimeat.meat.org.nutrimeat.drawer.BulkOrder;
 import app.nutrimeat.meat.org.nutrimeat.drawer.ContactUs;
 import app.nutrimeat.meat.org.nutrimeat.drawer.Recipes;
 import app.nutrimeat.meat.org.nutrimeat.product.Products;
-import app.nutrimeat.meat.org.nutrimeat.product.ProductsFragment;
 
 public class Navdrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -123,10 +122,10 @@ public class Navdrawer extends AppCompatActivity
                 fragment = new Recipes();
                 title = "Home";
                 break;
-            case R.id.products:
+          /*  case R.id.products:
                 fragment = ProductsFragment.newInstance();
                 title = "Products";
-                break;
+                break;*/
            /* case R.id.nav_wc:
                 fragment = new WatsCookingFragment();
                 title = "What's Cooking";

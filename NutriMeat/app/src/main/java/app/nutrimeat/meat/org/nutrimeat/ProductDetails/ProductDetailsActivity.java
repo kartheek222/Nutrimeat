@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import app.nutrimeat.meat.org.nutrimeat.ApiClient;
+import app.nutrimeat.meat.org.nutrimeat.BulkOrderActivity;
 import app.nutrimeat.meat.org.nutrimeat.CommonFunctions;
 import app.nutrimeat.meat.org.nutrimeat.R;
 import app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_regular;
@@ -35,7 +36,7 @@ import retrofit2.Response;
 
 import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PRODUCT_CART;
 
-public class ProductDetailsActivity extends AppCompatActivity {
+public class ProductDetailsActivity extends AppCompatActivity implements View.OnClickListener {
     Spinner quantity, desired;
     ModelCart model_in_cart = new ModelCart();
     private Product_Model product;
@@ -63,6 +64,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         ImageView bg_image = (ImageView) findViewById(R.id.product_image);
         quantity = (Spinner) findViewById(R.id.quantity);
         item_price = (p_MyCustomTextView_regular) findViewById(R.id.item_price);
+        findViewById(R.id.tvBuilOrder).setOnClickListener(this);
         desired = (Spinner) findViewById(R.id.desired);
         Picasso.with(this)
                 .load("http://www.nutrimeat.in/assets/user/img/products/med/" + product.getItem_image())
@@ -261,5 +263,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
         setResult(Activity.RESULT_OK, intent);
         finish();
         //  super.onBackPressed();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tvBuilOrder:
+                startActivity(new Intent(this, BulkOrderActivity.class));
+                break;
+        }
     }
 }

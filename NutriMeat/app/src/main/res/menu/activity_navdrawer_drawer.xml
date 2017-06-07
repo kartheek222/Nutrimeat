@@ -7,11 +7,11 @@
             android:icon="@drawable/format_line_weight"
             android:id="@+id/home"/>
 
-        <item
+      <!--  <item
             android:title="Products"
             android:icon="@drawable/format_line_weight"
             android:id="@+id/products"/>
-
+-->
 
       <!--  <item
             android:id="@+id/nav_wc"
