@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.IntentCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -95,7 +96,23 @@ public class AcountFragment extends Fragment {
         // mRecycler.setLayoutManager(new GridLayoutManager(this, 4));
         progressBar.setVisibility(View.VISIBLE);
         API apiService = ApiClient.getClient().create(API.class);
-        user_name.setText(prefManager.getName() + "\n" + prefManager.getEmail() + "\n" + prefManager.getMobile());
+        StringBuilder builder = new StringBuilder("");
+        if (!TextUtils.isEmpty(prefManager.getName())) {
+            builder.append(prefManager.getName());
+        }
+        if (!TextUtils.isEmpty(prefManager.getEmail())) {
+            if (builder.length() > 0) {
+                builder.append("\n");
+            }
+            builder.append(prefManager.getEmail());
+        }
+        if (!TextUtils.isEmpty(prefManager.getMobile())) {
+            if (builder.length() > 0) {
+                builder.append("\n");
+            }
+            builder.append(prefManager.getMobile());
+        }
+        user_name.setText(builder);
         if (prefManager.getIsGuestLogin()) {
             profile_view.setVisibility(View.GONE);
 

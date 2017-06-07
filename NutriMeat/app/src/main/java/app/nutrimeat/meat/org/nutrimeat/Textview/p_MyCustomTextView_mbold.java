@@ -9,8 +9,8 @@ import android.widget.TextView;
 public class p_MyCustomTextView_mbold extends TextView {
 
     public p_MyCustomTextView_mbold(Context context, AttributeSet arrt) {
-        super(context,arrt);
-        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Semibold.ttf"));
+        super(context, arrt);
+        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-SemiBold.ttf"));
     }
 
 

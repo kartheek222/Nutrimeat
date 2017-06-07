@@ -1,6 +1,7 @@
 package app.nutrimeat.meat.org.nutrimeat;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.Profile;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -57,6 +60,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener, GoogleApiClient.OnConnectionFailedListener {
 
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
     CallbackManager callbackManager;
     LoginButton loginButton;
     TextView welcome, forgot;
-
+    private CheckBox chRememberMe;
     Button login_manual, signup_manual;
 
     EditText email, password;
@@ -99,9 +103,15 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
             startActivity(intent);
         }
         FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_main);
         welcome = (TextView) findViewById(R.id.welcome);
-        Typeface welcomeFont = Typeface.createFromAsset(getAssets(), "fonts/welcome.ttf");
+        email = (EditText) findViewById(R.id.email);
+        password = (EditText) findViewById(R.id.password);
+        chRememberMe = (CheckBox) findViewById(R.id.chRememberMe);
+        email.setText(prefManager.getUserLoginId());
+        password.setText(prefManager.getUserLoginPassword());
+        Typeface welcomeFont = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");
         welcome.setTypeface(welcomeFont);
         // Manually checking internet connection
         checkConnection();
@@ -391,11 +401,15 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
 
     }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     private void invokeLoginWithEmail() {
         prefManager.setIsGuestLogin(false);
         //  login user with manual email and password
-        email = (EditText) findViewById(R.id.email);
-        password = (EditText) findViewById(R.id.password);
+
         String e1 = email.getText().toString();
         String p1 = password.getText().toString();
 
@@ -437,6 +451,14 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
                         } else {
                             prefManager.setMobile(input);
                         }
+                        if (chRememberMe.isChecked()) {
+                            prefManager.setLoginUserId(input);
+                            prefManager.setLoginPassword(password.getText().toString());
+                        } else {
+//                            prefManager.setLoginUserId("");
+//                            prefManager.setLoginPassword("");
+                        }
+                        prefManager.setFirstTimeLaunch(false);
                         Toast.makeText(getApplicationContext(), "User Login Successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, Navdrawer.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

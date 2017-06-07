@@ -4,8 +4,9 @@
     <string name="login">Log in</string>
     <string name="email">Email Address / Mobile Number</string>
     <string name="password">Password</string>
-    <string name="facebook_app_id">1158257184253472</string>
-    <string name="fb_login_protocol_scheme">fb1158257184253472</string>
+    <string name="facebook_app_id">1931044377184542</string>
+    <string name="fb_login_protocol_scheme">fb1931044377184542</string>
+
     <string name="api_url">http://www.nutrimeat.in/api/</string>
 
     <!-- TODO: Remove or change this placeholder text -->

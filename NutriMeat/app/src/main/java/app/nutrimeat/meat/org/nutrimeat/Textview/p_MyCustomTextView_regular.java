@@ -9,13 +9,13 @@ import android.widget.TextView;
 public class p_MyCustomTextView_regular extends TextView {
 
     public p_MyCustomTextView_regular(Context context, AttributeSet arrt) {
-        super(context,arrt);
-        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Regular.ttf"));
+        super(context, arrt);
+        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-Regular.ttf"));
     }
 
 
     public p_MyCustomTextView_regular(Context context) {
         super(context);
-        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Regular.ttf"));
+        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-Regular.ttf"));
     }
 }

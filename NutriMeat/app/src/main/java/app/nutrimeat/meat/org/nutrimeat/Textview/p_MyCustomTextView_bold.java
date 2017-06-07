@@ -10,7 +10,7 @@ public class p_MyCustomTextView_bold extends TextView {
 
     public p_MyCustomTextView_bold(Context context, AttributeSet arrt) {
         super(context,arrt);
-        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Bold.ttf"));
+        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-Bold.ttf"));
     }
 
 

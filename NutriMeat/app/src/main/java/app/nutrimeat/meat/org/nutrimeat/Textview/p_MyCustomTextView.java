@@ -9,8 +9,8 @@ import android.widget.TextView;
 public class p_MyCustomTextView extends TextView {
 
     public p_MyCustomTextView(Context context, AttributeSet arrt) {
-        super(context,arrt);
-        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Light.ttf"));
+        super(context, arrt);
+        this.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-Light.ttf"));
     }
 
 

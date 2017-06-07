@@ -1,6 +1,8 @@
 package app.nutrimeat.meat.org.nutrimeat;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
@@ -20,10 +22,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import app.nutrimeat.meat.org.nutrimeat.Account.AcountFragment;
+import app.nutrimeat.meat.org.nutrimeat.Home.TrackGPS;
 import app.nutrimeat.meat.org.nutrimeat.drawer.BulkOrder;
 import app.nutrimeat.meat.org.nutrimeat.drawer.ContactUs;
 import app.nutrimeat.meat.org.nutrimeat.drawer.Recipes;
 import app.nutrimeat.meat.org.nutrimeat.product.Products;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Navdrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,6 +41,7 @@ public class Navdrawer extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navdrawer);
         prefManager = new PrefManager(this);
+        startService(new Intent(getApplicationContext(), TrackGPS.class));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.defaultColor));
         setSupportActionBar(toolbar);
@@ -83,6 +88,11 @@ public class Navdrawer extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navdrawer, menu);
         return true;
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override
@@ -188,4 +198,9 @@ public class Navdrawer extends AppCompatActivity
         dialog.show();
     }
 
+    @Override
+    protected void onDestroy() {
+        stopService(new Intent(getApplicationContext(), TrackGPS.class));
+        super.onDestroy();
+    }
 }

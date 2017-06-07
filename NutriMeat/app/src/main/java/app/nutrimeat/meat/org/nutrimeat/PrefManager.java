@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 
 
 public class PrefManager {
+    private static final String CAN_ENABLE_CHECKOUT = "canEnableCheckout";
+    private static final String USER_LOGIN_ID = "userLoginId";
+    private static final String USER_LOGIN_PASSWORD = "userLoginPassword";
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     Context _context;
@@ -77,6 +80,33 @@ public class PrefManager {
 
     public boolean isFirstTimeLaunch() {
         return pref.getBoolean(IS_FIRST_TIME_LAUNCH, true);
+    }
+
+    public void setEnableCheckout(boolean isEnabled) {
+        editor.putBoolean(CAN_ENABLE_CHECKOUT, isEnabled);
+        editor.commit();
+    }
+
+    public boolean canCheckout() {
+        return pref.getBoolean(CAN_ENABLE_CHECKOUT, true);
+    }
+
+    public void setLoginUserId(String input) {
+        editor.putString(USER_LOGIN_ID, input);
+        editor.commit();
+    }
+
+    public String getUserLoginId() {
+        return pref.getString(USER_LOGIN_ID, "");
+    }
+
+    public void setLoginPassword(String password) {
+        editor.putString(USER_LOGIN_PASSWORD, password);
+        editor.commit();
+    }
+
+    public String getUserLoginPassword() {
+        return pref.getString(USER_LOGIN_PASSWORD, "");
     }
 
 }

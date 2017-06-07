@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,16 +17,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.support.v4.BuildConfig;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import app.nutrimeat.meat.org.nutrimeat.PrefManager;
 
 
 public class TrackGPS extends Service implements LocationListener {
 
-    private final Activity mContext;
+    private static final int MAX_ORDER_DISTANCE = 5000;
+    private Context mContext;
 
 
     boolean checkGPS = false;
@@ -48,8 +50,18 @@ public class TrackGPS extends Service implements LocationListener {
     protected LocationManager locationManager;
     private int MY_PERMISSION_ACCESS_COARSE_LOCATION = 11;
 
+    public TrackGPS() {
+    }
+
     public TrackGPS(Activity mContext) {
         this.mContext = mContext;
+        getLocation();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mContext = getApplicationContext();
         getLocation();
     }
 
@@ -210,9 +222,12 @@ public class TrackGPS extends Service implements LocationListener {
 
     public void stopUsingGPS() {
         if (locationManager != null) {
-
             locationManager.removeUpdates(TrackGPS.this);
         }
+    }
+
+    public int getDistanceBetweenLatLang(Location loc1, Location loc2) {
+        return (int) loc1.distanceTo(loc2);
     }
 
     @Override
@@ -220,14 +235,37 @@ public class TrackGPS extends Service implements LocationListener {
         return null;
     }
 
+    public void validateLocation(Location location) {
+        PrefManager manager = new PrefManager(getApplicationContext());
+        if (getDistanceBetweenLatLang(location, getCenterLocation()) < MAX_ORDER_DISTANCE) {
+            manager.setEnableCheckout(true);
+        } else {
+            manager.setEnableCheckout(false);
+        }
+    }
+
+    public Location getCenterLocation() {
+        Location location = new Location("");
+        location.setLatitude(51.5033640);
+        location.setLongitude(-0.1276250);
+        return location;
+    }
+
     @Override
     public void onLocationChanged(Location location) {
-
+        if (location != null) {
+            validateLocation(location);
+        }
     }
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
 
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_NOT_STICKY;
     }
 
     @Override

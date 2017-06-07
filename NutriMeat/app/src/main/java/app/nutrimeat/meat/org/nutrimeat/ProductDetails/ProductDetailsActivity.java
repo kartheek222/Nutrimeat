@@ -1,6 +1,7 @@
 package app.nutrimeat.meat.org.nutrimeat.ProductDetails;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import app.nutrimeat.meat.org.nutrimeat.product.Product_Model;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PRODUCT_CART;
 
@@ -192,6 +194,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
 
 
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     private void updateshared() {

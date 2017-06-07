@@ -1,6 +1,7 @@
 package app.nutrimeat.meat.org.nutrimeat;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -24,23 +25,25 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Signup extends AppCompatActivity {
 
     TextView mm;
-    EditText name,email,password,mobile;
+    EditText name, email, password, mobile;
     Button signup;
     private PrefManager prefManager;
     ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         prefManager = new PrefManager(this);
-        mm = (TextView)findViewById(R.id.sp);
-        Typeface welcomeFont = Typeface.createFromAsset(getAssets(),"fonts/welcome.ttf");
+        mm = (TextView) findViewById(R.id.sp);
+        Typeface welcomeFont = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");
         mm.setTypeface(welcomeFont);
-        signup = (Button)findViewById(R.id.signup);
+        signup = (Button) findViewById(R.id.signup);
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,29 +55,29 @@ public class Signup extends AppCompatActivity {
     }
 
     private void invokeSignUp() {
-        name = (EditText)findViewById(R.id.name);
-        email = (EditText)findViewById(R.id.email);
-        password = (EditText)findViewById(R.id.password);
-        mobile = (EditText)findViewById(R.id.mobilenumber);
+        name = (EditText) findViewById(R.id.name);
+        email = (EditText) findViewById(R.id.email);
+        password = (EditText) findViewById(R.id.password);
+        mobile = (EditText) findViewById(R.id.mobilenumber);
 
         final String n1 = name.getText().toString();
         final String e1 = email.getText().toString();
         String p1 = password.getText().toString();
         final String m1 = mobile.getText().toString();
-        if (n1.length() == 0){
+        if (n1.length() == 0) {
             name.setError("This field is required");
         }
-        if (e1.length() == 0){
+        if (e1.length() == 0) {
             email.setError("This field is required");
         }
-        if(p1.length() == 0){
+        if (p1.length() == 0) {
             password.setError("This field is required");
         }
-        if (m1.length() == 0){
+        if (m1.length() == 0) {
             mobile.setError("This field is required");
         }
-        if (!n1.equalsIgnoreCase("") && !e1.equalsIgnoreCase("") && !p1.equalsIgnoreCase("") && !m1.equalsIgnoreCase("")){
-            progressDialog = ProgressDialog.show(this,"Please wait ...","Logging User...",true);
+        if (!n1.equalsIgnoreCase("") && !e1.equalsIgnoreCase("") && !p1.equalsIgnoreCase("") && !m1.equalsIgnoreCase("")) {
+            progressDialog = ProgressDialog.show(this, "Please wait ...", "Logging User...", true);
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(getString(R.string.api_url))
                     .addConverterFactory(GsonConverterFactory.create())
@@ -93,20 +96,19 @@ public class Signup extends AppCompatActivity {
                 public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                     int statusCode = response.code();
                     ServerResponse response1 = response.body();
-                    Log.d("Response_register","onResponse: "+statusCode);
-                    Log.d("Status",response1.getStatus());
+                    Log.d("Response_register", "onResponse: " + statusCode);
+                    Log.d("Status", response1.getStatus());
                     progressDialog.dismiss();
-                    if (response1.getStatus().equalsIgnoreCase("failed")){
-                        Log.d("ERROR",response1.getError());
-                        Toast.makeText(getApplicationContext(),response1.getError(),Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    if (response1.getStatus().equalsIgnoreCase("failed")) {
+                        Log.d("ERROR", response1.getError());
+                        Toast.makeText(getApplicationContext(), response1.getError(), Toast.LENGTH_SHORT).show();
+                    } else {
                         prefManager.setName(n1);
                         prefManager.setEmail(e1);
                         prefManager.setMobile(m1);
-                        Log.d("NAME_pref",prefManager.getName());
-                        Log.d("Email_pref",prefManager.getEmail());
-                        Log.d("Mobile_pref",prefManager.getMobile());
+                        Log.d("NAME_pref", prefManager.getName());
+                        Log.d("Email_pref", prefManager.getEmail());
+                        Log.d("Mobile_pref", prefManager.getMobile());
                         sendSMS(prefManager.getMobile());
                     }
 
@@ -115,9 +117,9 @@ public class Signup extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<ServerResponse> call, Throwable t) {
 
-                    Log.d("Response_register","onFailure: "+t.getMessage());
+                    Log.d("Response_register", "onFailure: " + t.getMessage());
                     progressDialog.dismiss();
-                    Toast.makeText(getApplicationContext(),"Internal error. Please Try again",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Internal error. Please Try again", Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -126,8 +128,13 @@ public class Signup extends AppCompatActivity {
 
     }
 
-    private void sendSMS(final String mob){
-        progressDialog = ProgressDialog.show(this,"Please wait ...","Sending OTP...",true);
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    private void sendSMS(final String mob) {
+        progressDialog = ProgressDialog.show(this, "Please wait ...", "Sending OTP...", true);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(getString(R.string.api_url))
                 .addConverterFactory(GsonConverterFactory.create())
@@ -142,15 +149,14 @@ public class Signup extends AppCompatActivity {
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                 int statusCode = response.code();
                 ServerResponse response1 = response.body();
-                Log.d("SENDSMS","onResponse: "+statusCode);
-                Log.d("Status",response1.getStatus());
+                Log.d("SENDSMS", "onResponse: " + statusCode);
+                Log.d("Status", response1.getStatus());
                 progressDialog.dismiss();
-                if (response1.getStatus().equalsIgnoreCase("failed")){
-                    Log.d("ERROR",response1.getError());
-                    Toast.makeText(getApplicationContext(),response1.getError(),Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(),"SMS Sent, Enter Your OTP Above",Toast.LENGTH_SHORT).show();
+                if (response1.getStatus().equalsIgnoreCase("failed")) {
+                    Log.d("ERROR", response1.getError());
+                    Toast.makeText(getApplicationContext(), response1.getError(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "SMS Sent, Enter Your OTP Above", Toast.LENGTH_SHORT).show();
                     verifySMS(mob);
 
                 }
@@ -158,15 +164,15 @@ public class Signup extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
-                Log.d("SENDSMS","onFailure: "+t.getMessage());
-                Toast.makeText(getApplicationContext(),"Internal error. Please Try again",Toast.LENGTH_SHORT).show();
+                Log.d("SENDSMS", "onFailure: " + t.getMessage());
+                Toast.makeText(getApplicationContext(), "Internal error. Please Try again", Toast.LENGTH_SHORT).show();
 
             }
         });
 
     }
 
-    private void verifySMS(final String mobil){
+    private void verifySMS(final String mobil) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(Signup.this);
         View mView = layoutInflater.inflate(R.layout.otp, null);
@@ -178,7 +184,7 @@ public class Signup extends AppCompatActivity {
                 .setPositiveButton("VERIFY", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
                         // ToDo get user input here
-                        progressDialog = ProgressDialog.show(Signup.this,"Please wait ...","Verifying OTP...",true);
+                        progressDialog = ProgressDialog.show(Signup.this, "Please wait ...", "Verifying OTP...", true);
                         Retrofit retrofit = new Retrofit.Builder()
                                 .baseUrl(getString(R.string.api_url))
                                 .addConverterFactory(GsonConverterFactory.create())
@@ -194,22 +200,21 @@ public class Signup extends AppCompatActivity {
                             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                                 int statusCode = response.code();
                                 ServerResponse response1 = response.body();
-                                Log.d("VERIFYSMS","onResponse: "+statusCode);
-                                Log.d("Status",response1.getStatus());
+                                Log.d("VERIFYSMS", "onResponse: " + statusCode);
+                                Log.d("Status", response1.getStatus());
                                 progressDialog.dismiss();
-                                if (response1.getStatus().equalsIgnoreCase("failed")){
-                                    Log.d("ERROR",response1.getError());
-                                    Toast.makeText(getApplicationContext(),response1.getError(),Toast.LENGTH_SHORT).show();
-                                }
-                                else {
-                                    Toast.makeText(getApplicationContext(),response1.getStatus(),Toast.LENGTH_SHORT).show();
+                                if (response1.getStatus().equalsIgnoreCase("failed")) {
+                                    Log.d("ERROR", response1.getError());
+                                    Toast.makeText(getApplicationContext(), response1.getError(), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), response1.getStatus(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<ServerResponse> call, Throwable t) {
-                                Log.d("VERIFYSMS","onFailure: "+t.getMessage());
-                                Toast.makeText(getApplicationContext(),"Internal error. Please Try again",Toast.LENGTH_SHORT).show();
+                                Log.d("VERIFYSMS", "onFailure: " + t.getMessage());
+                                Toast.makeText(getApplicationContext(), "Internal error. Please Try again", Toast.LENGTH_SHORT).show();
 
                             }
 
@@ -221,7 +226,7 @@ public class Signup extends AppCompatActivity {
                 })
                 .setNegativeButton("RESEND",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 sendSMS(mobil);
                             }
                         });

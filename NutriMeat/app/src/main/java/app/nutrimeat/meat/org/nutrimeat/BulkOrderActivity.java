@@ -1,10 +1,12 @@
 package app.nutrimeat.meat.org.nutrimeat;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import app.nutrimeat.meat.org.nutrimeat.drawer.BulkOrder;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class BulkOrderActivity extends AppCompatActivity {
 
@@ -19,5 +21,10 @@ public class BulkOrderActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, new BulkOrder()).commit();
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

@@ -1,5 +1,6 @@
 package app.nutrimeat.meat.org.nutrimeat.Recipies;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +15,12 @@ import java.util.List;
 import app.nutrimeat.meat.org.nutrimeat.ApiClient;
 import app.nutrimeat.meat.org.nutrimeat.R;
 import app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_bold;
-import app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_mbold;
 import app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_regular;
 import app.nutrimeat.meat.org.nutrimeat.api.API;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class RecipiesDetailsActivity extends AppCompatActivity {
 
@@ -38,7 +39,7 @@ public class RecipiesDetailsActivity extends AppCompatActivity {
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.expandedappbar);
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.collapsedappbar);
         final ImageView bg_image = (ImageView) findViewById(R.id.product_image);
-        final p_MyCustomTextView_bold product_name=(p_MyCustomTextView_bold) findViewById(R.id.product_name);
+        final p_MyCustomTextView_bold product_name = (p_MyCustomTextView_bold) findViewById(R.id.product_name);
         final p_MyCustomTextView_regular time_pre = (p_MyCustomTextView_regular) findViewById(R.id.time_pre);
         final p_MyCustomTextView_regular serving = (p_MyCustomTextView_regular) findViewById(R.id.serving);
         final p_MyCustomTextView_regular cals = (p_MyCustomTextView_regular) findViewById(R.id.cals);
@@ -64,14 +65,14 @@ public class RecipiesDetailsActivity extends AppCompatActivity {
                 time_pre.setText(product.getRe_prep_time());
                 serving.setText(product.getRe_servings());
                 cals.setText(product.getRe_cal());
-                String ingredients=product.getRe_ingredients();
-                ingredients=ingredients.replace("<li>","- ");
-                ingredients=ingredients.replace("</li>","");
-                ingredients=ingredients.replace("<br>","");
-                String directions=product.getRe_description();
-                directions=directions.replace("<li>","- ");
-                directions=directions.replace("</li>","");
-                directions=directions.replace("<br>","");
+                String ingredients = product.getRe_ingredients();
+                ingredients = ingredients.replace("<li>", "- ");
+                ingredients = ingredients.replace("</li>", "");
+                ingredients = ingredients.replace("<br>", "");
+                String directions = product.getRe_description();
+                directions = directions.replace("<li>", "- ");
+                directions = directions.replace("</li>", "");
+                directions = directions.replace("<br>", "");
                 ingredients_des.setText(ingredients);
                 directions_des.setText(directions);
             }
@@ -83,4 +84,10 @@ public class RecipiesDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 }
