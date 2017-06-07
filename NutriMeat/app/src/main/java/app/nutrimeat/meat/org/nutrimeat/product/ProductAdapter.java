@@ -30,7 +30,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     private int rowLayout;
     private Products context;
     ArrayList<String> isadd_to_cart = new ArrayList<>();
-    ModelCart model_in_cart=new ModelCart();
+    ModelCart model_in_cart = new ModelCart();
+
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         RoundedImageView product_image;
         TextView item_name;
@@ -74,28 +75,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.item_name.setText(products.get(position).getItem_name());
         final List<ModelCart> listfromshared_preference = CommonFunctions.getSharedPreferenceProductList(context.getActivity(), PREF_PRODUCT_CART);
 
-        final boolean productexist=checkifproductexist(listfromshared_preference,product.getItem_id());
-        if(productexist)
-        {
-
+        final boolean productexist = checkifproductexist(listfromshared_preference, product.getItem_id());
+        if (productexist) {
             holder.addtocart.setText("ADDED TO CART");
             holder.addtocart.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.green)));
-        }
-        else {
+        } else {
             holder.addtocart.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorAccent)));
         }
 
-      holder.item_price.setText(String.valueOf(products.get(position).getItem_price()));
+        holder.item_price.setText(String.valueOf(products.get(position).getItem_price()));
         holder.addtocart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final boolean productexist=checkifproductexist(listfromshared_preference,product.getItem_id());
+                final boolean productexist = checkifproductexist(listfromshared_preference, product.getItem_id());
                 Intent intent = new Intent(context.getActivity(), ProductDetailsActivity.class);
                 intent.putExtra("product", product);
                 intent.putExtra("position", position);
                 intent.putExtra("isadd_to_cart", isadd_to_cart);
-                intent.putExtra("product_exist",productexist);
-                intent.putExtra("model_in_cart",model_in_cart);
+                intent.putExtra("product_exist", productexist);
+                intent.putExtra("model_in_cart", model_in_cart);
 
                 context.startActivityForResult(intent, 1);
             }
@@ -104,7 +102,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     private boolean checkifproductexist(List<ModelCart> listfromshared_preference, int item_id) {
-        if(listfromshared_preference!=null) {
+        if (listfromshared_preference != null) {
             for (int i = 0; i < listfromshared_preference.size(); i++) {
                 ModelCart model = listfromshared_preference.get(i);
                 if (model.getItem_id() == item_id) {
@@ -114,7 +112,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 }
             }
             return false;
-        }else {
+        } else {
             return false;
         }
     }

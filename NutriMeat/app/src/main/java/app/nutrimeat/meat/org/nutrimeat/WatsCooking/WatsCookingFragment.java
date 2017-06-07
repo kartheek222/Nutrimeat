@@ -65,7 +65,7 @@ public class WatsCookingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //returning our layout file
-        View rootview = inflater.inflate(R.layout.fragment_menu_products, container, false);
+        View rootview = inflater.inflate(R.layout.fragment_menu_products_specific, container, false);
         progressBar = (ProgressBar) rootview.findViewById(R.id.progressBar);
         setHasOptionsMenu(true);
         final p_MyCustomTextView_mbold emptyview = (p_MyCustomTextView_mbold) rootview.findViewById(R.id.emptyview);

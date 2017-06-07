@@ -20,9 +20,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import app.nutrimeat.meat.org.nutrimeat.Account.AcountFragment;
-import app.nutrimeat.meat.org.nutrimeat.Home.HomeFragment;
 import app.nutrimeat.meat.org.nutrimeat.drawer.BulkOrder;
 import app.nutrimeat.meat.org.nutrimeat.drawer.ContactUs;
+import app.nutrimeat.meat.org.nutrimeat.drawer.Recipes;
 import app.nutrimeat.meat.org.nutrimeat.product.Products;
 import app.nutrimeat.meat.org.nutrimeat.product.ProductsFragment;
 
@@ -62,7 +62,7 @@ public class Navdrawer extends AppCompatActivity
         navigationView.getMenu().getItem(0).setChecked(true);
         View header = navigationView.getHeaderView(0);
         TextView emailNav = (TextView) header.findViewById(R.id.emailNav);
-        if(prefManager.getName()!=null) {
+        if (prefManager.getName() != null) {
             emailNav.setText(prefManager.getName());
         }
         //add this line to display menu1 when the activity is loaded
@@ -119,7 +119,8 @@ public class Navdrawer extends AppCompatActivity
         //initializing the fragment object which is selected
         switch (itemId) {
             case R.id.home:
-                fragment = HomeFragment.newInstance("All");
+//                fragment = HomeFragment.newInstance("All");
+                fragment = new Recipes();
                 title = "Home";
                 break;
             case R.id.products:
