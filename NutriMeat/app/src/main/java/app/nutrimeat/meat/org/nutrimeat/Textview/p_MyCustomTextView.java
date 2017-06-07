@@ -12,6 +12,4 @@ public class p_MyCustomTextView extends TextView {
         super(context, arrt);
         this.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-Light.ttf"));
     }
-
-
 }

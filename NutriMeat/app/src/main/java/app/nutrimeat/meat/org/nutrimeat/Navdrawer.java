@@ -22,6 +22,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import app.nutrimeat.meat.org.nutrimeat.Account.AcountFragment;
+import app.nutrimeat.meat.org.nutrimeat.Home.StatsResponseModel;
 import app.nutrimeat.meat.org.nutrimeat.Home.TrackGPS;
 import app.nutrimeat.meat.org.nutrimeat.drawer.BulkOrder;
 import app.nutrimeat.meat.org.nutrimeat.drawer.ContactUs;
@@ -35,6 +36,7 @@ public class Navdrawer extends AppCompatActivity
     private BottomSheetBehavior<View> mBottomSheetBehavior;
     int ids;
     private PrefManager prefManager;
+    private StatsResponseModel statsResponseModel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,14 @@ public class Navdrawer extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    public StatsResponseModel getStatsResponseModel() {
+        return statsResponseModel;
+    }
+
+    public void setStatsResponseModel(StatsResponseModel statsResponseModel) {
+        this.statsResponseModel = statsResponseModel;
     }
 
     @Override

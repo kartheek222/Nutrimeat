@@ -1,22 +1,38 @@
 package app.nutrimeat.meat.org.nutrimeat.drawer;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import app.nutrimeat.meat.org.nutrimeat.Home.StatsResponseModel;
 import app.nutrimeat.meat.org.nutrimeat.Navdrawer;
 import app.nutrimeat.meat.org.nutrimeat.R;
 import app.nutrimeat.meat.org.nutrimeat.Recipies.RecipiesFragment;
 import app.nutrimeat.meat.org.nutrimeat.WatsCooking.WatsCookingFragment;
+import app.nutrimeat.meat.org.nutrimeat.api.API;
 import app.nutrimeat.meat.org.nutrimeat.product.ProductsFragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class Recipes extends Fragment implements View.OnClickListener {
+
+    private ProgressDialog progressDialog;
+    private TextView tvDeliveryStatus, tvHappyCustomers, tvKilosSold;
 
     @Nullable
     @Override
@@ -29,7 +45,52 @@ public class Recipes extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.tvProducts).setOnClickListener(this);
         view.findViewById(R.id.tvRecipies).setOnClickListener(this);
         view.findViewById(R.id.tvWhatsCooking).setOnClickListener(this);
+        tvKilosSold = (TextView) view.findViewById(R.id.tvKilosSold);
+        tvHappyCustomers = (TextView) view.findViewById(R.id.tvHappyCustomers);
+        tvDeliveryStatus = (TextView) view.findViewById(R.id.tvOrdersDelivered);
+        if (((Navdrawer) getActivity()).getStatsResponseModel() == null) {
+            reqestRecipeStatus();
+        } else {
+            StatsResponseModel responseModel = ((Navdrawer) getActivity()).getStatsResponseModel();
+            tvDeliveryStatus.setText(responseModel.getDelivered());
+            tvKilosSold.setText(responseModel.getSold());
+            tvHappyCustomers.setText(responseModel.getHappycustomers());
+
+        }
         return view;
+    }
+
+    private void reqestRecipeStatus() {
+        progressDialog = ProgressDialog.show(getActivity(), "Please wait ...", "Logging User...", true);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(getString(R.string.api_url))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        API api = retrofit.create(API.class);
+        Call<StatsResponseModel> responseCall = api.getStats();
+        responseCall.enqueue(new Callback<StatsResponseModel>() {
+            @Override
+            public void onResponse(Call<StatsResponseModel> call, Response<StatsResponseModel> response) {
+                StatsResponseModel responseModel = response.body();
+                progressDialog.dismiss();
+                if (responseModel != null) {
+                    if (getActivity() != null) {
+                        ((Navdrawer) getActivity()).setStatsResponseModel(responseModel);
+                    }
+                    tvDeliveryStatus.setText(responseModel.getDelivered());
+                    tvKilosSold.setText(responseModel.getSold());
+                    tvHappyCustomers.setText(responseModel.getHappycustomers());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StatsResponseModel> call, Throwable t) {
+                Log.d("RESPONSE_Login", "onFailure: " + t.getMessage());
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Internal error. Please Try Again", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
