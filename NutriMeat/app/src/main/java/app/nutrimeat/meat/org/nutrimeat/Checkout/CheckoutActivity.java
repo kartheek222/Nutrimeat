@@ -30,6 +30,7 @@ import app.nutrimeat.meat.org.nutrimeat.PrefManager;
 import app.nutrimeat.meat.org.nutrimeat.R;
 import app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_mbold;
 import app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_regular;
+import app.nutrimeat.meat.org.nutrimeat.payment.PaymentActivity;
 import app.nutrimeat.meat.org.nutrimeat.product.ModelCart;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -118,7 +119,9 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                 if (manager.canCheckout()) {
                     final List<ModelCart> cart_itens = CommonFunctions.getSharedPreferenceProductList(CheckoutActivity.this, PREF_PRODUCT_CART);
                     if (cart_itens != null && cart_itens.size() > 0) {
-                        navigateUserToPayment(cart_itens);
+                        Intent intent=new Intent(this, PaymentActivity.class);
+                        startActivity(intent);
+//                        navigateUserToPayment(cart_itens);
                     } else {
                         Toast.makeText(getApplicationContext(), "No items added to card", Toast.LENGTH_SHORT).show();
                     }

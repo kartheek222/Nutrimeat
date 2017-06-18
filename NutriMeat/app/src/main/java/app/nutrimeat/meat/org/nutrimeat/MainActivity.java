@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         chRememberMe = (CheckBox) findViewById(R.id.chRememberMe);
-        email.setText(prefManager.getUserLoginId());
-        password.setText(prefManager.getUserLoginPassword());
+//        email.setText(prefManager.getUserLoginId());
+//        password.setText(prefManager.getUserLoginPassword());
         Typeface welcomeFont = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");
         welcome.setTypeface(welcomeFont);
         // Manually checking internet connection

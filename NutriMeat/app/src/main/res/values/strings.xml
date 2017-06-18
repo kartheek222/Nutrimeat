@@ -109,7 +109,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_checkout">CheckoutActivity</string>
-    <string name="title_activity_recipies_details">Recipies</string>
+    <string name="title_activity_recipies_details">Recipes</string>
 
     <string name="fetch_address">Fetch address</string>
 
@@ -122,4 +122,9 @@
     <string name="no_location_data_provided">No location data provided</string>
     <string name="service_not_available">Sorry, the service is not available</string>
     <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
+
+    <string-array name="chicken_types">
+        <item>Whole Chicken Without Skin</item>
+    </string-array>
+
 </resources>

@@ -116,7 +116,7 @@ public class Recipes extends Fragment implements View.OnClickListener {
                 ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.content_frame, new RecipiesFragment());
                 ft.commit();
-                ((Navdrawer) getActivity()).getSupportActionBar().setTitle("Recipies");
+                ((Navdrawer) getActivity()).getSupportActionBar().setTitle("Recipes");
                 break;
             case R.id.tvWhatsCooking:
                 //replacing the fragment

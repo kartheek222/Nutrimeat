@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.payUMoney.sdk.BuildConfig;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -31,14 +32,14 @@ public class RecipiesAdapter extends RecyclerView.Adapter<RecipiesAdapter.Produc
         RoundedImageView product_image;
         TextView item_name;
         TextView item_price;
-        p_MyCustomTextView_mbold read_more;
+        Button read_more;
 
         public ProductViewHolder(View v) {
             super(v);
             product_image = (RoundedImageView) v.findViewById(R.id.product_image);
             item_name = (TextView) v.findViewById(R.id.item_name);
             item_price = (TextView) v.findViewById(R.id.item_time);
-            read_more = (p_MyCustomTextView_mbold) v.findViewById(R.id.read_more);
+            read_more = (Button) v.findViewById(R.id.read_more);
 
         }
     }
