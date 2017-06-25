@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
         // home screen if user login or first time opening
 
         if (!prefManager.isFirstTimeLaunch()) {
-
             Intent intent = new Intent(MainActivity.this, Navdrawer.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

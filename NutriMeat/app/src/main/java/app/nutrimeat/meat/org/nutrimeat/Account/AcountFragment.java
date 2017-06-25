@@ -76,7 +76,13 @@ public class AcountFragment extends Fragment {
         progressBar = (ProgressBar) rootview.findViewById(R.id.progressBar);
         login = (Button) rootview.findViewById(R.id.login);
         prefManager = new PrefManager(getActivity());
-        User_name = "frescoshashank@gmail.com";
+//        User_name = "frescoshashank@gmail.com";
+
+        PrefManager prefManager=new PrefManager(getActivity());
+        User_name = prefManager.getEmail();
+        if(TextUtils.isEmpty(User_name)){
+            User_name=prefManager.getMobile();
+        }
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();

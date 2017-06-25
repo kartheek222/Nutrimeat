@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,23 +21,29 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import app.nutrimeat.meat.org.nutrimeat.Account.AcountFragment;
+import app.nutrimeat.meat.org.nutrimeat.Checkout.CheckoutActivity;
 import app.nutrimeat.meat.org.nutrimeat.Home.StatsResponseModel;
 import app.nutrimeat.meat.org.nutrimeat.Home.TrackGPS;
 import app.nutrimeat.meat.org.nutrimeat.drawer.BulkOrder;
 import app.nutrimeat.meat.org.nutrimeat.drawer.ContactUs;
 import app.nutrimeat.meat.org.nutrimeat.drawer.Recipes;
+import app.nutrimeat.meat.org.nutrimeat.product.ModelCart;
 import app.nutrimeat.meat.org.nutrimeat.product.Products;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PRODUCT_CART;
+
 public class Navdrawer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentManager.OnBackStackChangedListener {
 
     private BottomSheetBehavior<View> mBottomSheetBehavior;
     int ids;
     private PrefManager prefManager;
     private StatsResponseModel statsResponseModel = null;
+    private TextView txtViewCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +83,27 @@ public class Navdrawer extends AppCompatActivity
     }
 
     @Override
+    public void setTitle(CharSequence title) {
+//        super.setTitle(title);
+        getSupportActionBar().setTitle(title);
+    }
+
+
+    @Override
     public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (fragment != null) {
+            if (fragment instanceof Recipes) {
+                setTitle("Home");
+            } else if (fragment instanceof AcountFragment) {
+                setTitle("Account");
+            } else if (fragment instanceof ContactUs) {
+                setTitle("Contact Us");
+            } else if (fragment instanceof BulkOrder) {
+                setTitle("Bulk Order");
+            }
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -95,9 +122,40 @@ public class Navdrawer extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navdrawer, menu);
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        final View notificaitons = menu.findItem(R.id.action_cart).getActionView();
+
+        txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
+        // update menu
+        final List<ModelCart> isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(this, PREF_PRODUCT_CART);
+        if (isadd_to_cart != null) {
+            updateHotCount(isadd_to_cart);
+        }
+
+        notificaitons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Navdrawer.this, CheckoutActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return true;
+    }
+
+    public void updateHotCount(List<ModelCart> selc_products) {
+        if (selc_products != null) {
+            final int count = selc_products.size();
+            if (count == 0)
+                txtViewCount.setVisibility(View.GONE);
+            else {
+                txtViewCount.setVisibility(View.VISIBLE);
+                txtViewCount.setText(Integer.toString(count));
+                // supportInvalidateOptionsMenu();
+            }
+        }
+
     }
 
     @Override
@@ -182,8 +240,8 @@ public class Navdrawer extends AppCompatActivity
     @Override
     public void onRestart() {
         super.onRestart();
-        finish();
-        startActivity(getIntent());
+//        finish();
+//        startActivity(getIntent());
     }
 
     public void show_fliter_dailog() {
@@ -213,4 +271,21 @@ public class Navdrawer extends AppCompatActivity
         stopService(new Intent(getApplicationContext(), TrackGPS.class));
         super.onDestroy();
     }
+
+    @Override
+    public void onBackStackChanged() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if (fragment != null) {
+            if (fragment instanceof Recipes) {
+                setTitle("Home");
+            } else if (fragment instanceof AcountFragment) {
+                setTitle("Account");
+            } else if (fragment instanceof ContactUs) {
+                setTitle("Contact Us");
+            } else if (fragment instanceof BulkOrder) {
+                setTitle("Bulk Order");
+            }
+        }
+    }
 }
+

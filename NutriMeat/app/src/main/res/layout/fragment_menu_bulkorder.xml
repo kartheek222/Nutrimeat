@@ -81,6 +81,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="30"
             android:text="Any Specifications"/>
 
@@ -88,6 +89,7 @@
             android:id="@+id/edit_text_specifications"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="70"
             android:hint="type your message here"/>
     </LinearLayout>

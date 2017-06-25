@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class WatsCookingFragment extends Fragment {
         //returning our layout file
         View rootview = inflater.inflate(R.layout.fragment_menu_products_specific, container, false);
         progressBar = (ProgressBar) rootview.findViewById(R.id.progressBar);
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
         final p_MyCustomTextView_mbold emptyview = (p_MyCustomTextView_mbold) rootview.findViewById(R.id.emptyview);
         final RecyclerView mRecycler = (RecyclerView) rootview.findViewById(R.id.products_rv);
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -93,7 +94,6 @@ public class WatsCookingFragment extends Fragment {
                     mRecycler.setAdapter(adapter);
 
                 }
-
             }
 
             @Override
@@ -111,7 +111,7 @@ public class WatsCookingFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
-        getActivity().setTitle("Products");
+//        getActivity().setTitle("Products");
     }
 
     public void add_product(List<WatsCooking_Model> products, int position, int serv_position) {
@@ -169,6 +169,7 @@ public class WatsCookingFragment extends Fragment {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("ids", R.id.home);
                 getActivity().startActivityForResult(intent, 1);
+                Toast.makeText(getActivity(),"Product added to cart",Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -223,6 +224,12 @@ public class WatsCookingFragment extends Fragment {
         return 0;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((Navdrawer) getActivity()).updateHotCount(CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PRODUCT_CART));
+
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -272,7 +279,8 @@ public class WatsCookingFragment extends Fragment {
             Log.e("I'm Back", "secound");
             if (resultCode == Activity.RESULT_OK) {
                 List<ModelCart> isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PRODUCT_CART);
-                updateHotCount(isadd_to_cart);
+//                updateHotCount(isadd_to_cart);
+                ((Navdrawer) getActivity()).updateHotCount(isadd_to_cart);
                 adapter.notifyDataSetChanged();
                 Log.e("I'm Back", "third");
             }

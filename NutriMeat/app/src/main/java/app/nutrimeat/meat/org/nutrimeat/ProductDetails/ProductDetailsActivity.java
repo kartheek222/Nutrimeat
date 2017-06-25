@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -73,6 +74,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 //  .resize(dp2px(220), 0)
                 .into(bg_image);
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +91,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                     set_isadd_to_cart.add(modelCart_pojo);
                     Snackbar.make(view, "Product Added", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+                    Toast.makeText(getApplicationContext(), "Product added to cart", Toast.LENGTH_SHORT).show();
                 } else {
                     set_isadd_to_cart = isadd_to_cart;
                     if (contains(set_isadd_to_cart, product.getItem_id())) {
@@ -95,6 +103,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         set_isadd_to_cart.add(modelCart_pojo);
                         Snackbar.make(view, "Product Added", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
+                        Toast.makeText(getApplicationContext(), "Product added to cart", Toast.LENGTH_SHORT).show();
                     }
                 }
                 CommonFunctions.setSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PRODUCT_CART, set_isadd_to_cart);

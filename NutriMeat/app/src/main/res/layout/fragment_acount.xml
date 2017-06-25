@@ -19,17 +19,19 @@
 
         <app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_mbold
             android:id="@+id/user_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_toLeftOf="@+id/ivEdit"
             android:layout_toRightOf="@+id/profile_pic"
             android:gravity="center"
             android:text="name"
             android:textSize="16sp" />
 
         <ImageView
+            android:id="@+id/ivEdit"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_alignParentRight="true"

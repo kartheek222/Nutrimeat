@@ -1,6 +1,7 @@
 package app.nutrimeat.meat.org.nutrimeat.Checkout;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +10,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -119,8 +122,7 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                 if (manager.canCheckout()) {
                     final List<ModelCart> cart_itens = CommonFunctions.getSharedPreferenceProductList(CheckoutActivity.this, PREF_PRODUCT_CART);
                     if (cart_itens != null && cart_itens.size() > 0) {
-                        Intent intent=new Intent(this, PaymentActivity.class);
-                        startActivity(intent);
+                        showDialog();
 //                        navigateUserToPayment(cart_itens);
                     } else {
                         Toast.makeText(getApplicationContext(), "No items added to card", Toast.LENGTH_SHORT).show();
@@ -212,5 +214,31 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                 Log.i(TAG, "User returned without login");
             }
         }
+    }
+
+    private void showDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final View dialogView = inflater.inflate(R.layout.payment_type_alert, null);
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(dialogView);
+        dialog.findViewById(R.id.textview_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialog.dismiss();
+            }
+        });
+        dialog.findViewById(R.id.textview_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CheckoutActivity.this, PaymentActivity.class);
+                intent.putExtra("amount", String.valueOf(checkoutAdapter.getSub_total()));
+                startActivity(intent);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
     }
 }

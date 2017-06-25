@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 import app.nutrimeat.meat.org.nutrimeat.BuildConfig;
 import app.nutrimeat.meat.org.nutrimeat.PrefManager;
@@ -43,8 +44,12 @@ public class PaymentActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payment_activity);
-        prefManager=new PrefManager(this);
-        totalmaount = "1";
+
+        Bundle bundle=getIntent().getExtras();
+        if(bundle!=null){
+            totalmaount=bundle.getString("amount");
+        }
+        prefManager = new PrefManager(this);
         nameofpayee = prefManager.getName();   // user name
         emailofpayee = prefManager.getEmail();    // email of the user
         phoneofpayee = prefManager.getMobile();  //user phone number has to send
@@ -131,7 +136,7 @@ public class PaymentActivity extends Activity {
     private String getPostString() {
         String key = BuildConfig.MERCHANT_KEY;
         String salt = BuildConfig.SALT_KEY;
-        String txnid = "TXN_ID"+String.valueOf(System.currentTimeMillis());
+        String txnid = "TXN_ID" + String.valueOf(System.currentTimeMillis());
         String amount = totalmaount;
         String firstname = nameofpayee;
         String email = emailofpayee;

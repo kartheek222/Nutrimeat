@@ -21,6 +21,7 @@ import java.util.List;
 import app.nutrimeat.meat.org.nutrimeat.ApiClient;
 import app.nutrimeat.meat.org.nutrimeat.Checkout.CheckoutActivity;
 import app.nutrimeat.meat.org.nutrimeat.CommonFunctions;
+import app.nutrimeat.meat.org.nutrimeat.Navdrawer;
 import app.nutrimeat.meat.org.nutrimeat.R;
 import app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_mbold;
 import app.nutrimeat.meat.org.nutrimeat.api.API;
@@ -30,7 +31,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PRODUCT_CART;
-
 
 
 public class RecipiesFragment extends Fragment {
@@ -58,7 +58,7 @@ public class RecipiesFragment extends Fragment {
         //returning our layout file
         View rootview = inflater.inflate(R.layout.fragment_menu_products_specific, container, false);
         progressBar = (ProgressBar) rootview.findViewById(R.id.progressBar);
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
         final p_MyCustomTextView_mbold emptyview = (p_MyCustomTextView_mbold) rootview.findViewById(R.id.emptyview);
         final RecyclerView mRecycler = (RecyclerView) rootview.findViewById(R.id.products_rv);
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -107,7 +107,7 @@ public class RecipiesFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //you can set the title for your toolbar here for different fragments different titles
-        getActivity().setTitle("Products");
+//        getActivity().setTitle("Products");
     }
 
     @Override
@@ -158,10 +158,17 @@ public class RecipiesFragment extends Fragment {
             Log.e("I'm Back", "secound");
             if (resultCode == Activity.RESULT_OK) {
                 List<ModelCart> isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PRODUCT_CART);
-                updateHotCount(isadd_to_cart);
+//                updateHotCount(isadd_to_cart);
+                ((Navdrawer) getActivity()).updateHotCount(isadd_to_cart);
                 adapter.notifyDataSetChanged();
                 Log.e("I'm Back", "third");
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((Navdrawer) getActivity()).updateHotCount(CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PRODUCT_CART));
     }
 }

@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -34,6 +36,12 @@ public class Recipes extends Fragment implements View.OnClickListener {
     private ProgressDialog progressDialog;
     private TextView tvDeliveryStatus, tvHappyCustomers, tvKilosSold;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(false);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,9 +63,15 @@ public class Recipes extends Fragment implements View.OnClickListener {
             tvDeliveryStatus.setText(responseModel.getDelivered());
             tvKilosSold.setText(responseModel.getSold());
             tvHappyCustomers.setText(responseModel.getHappycustomers());
-
         }
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().invalidateOptionsMenu();
+        ( (Navdrawer)getActivity()).setTitle("Home");
     }
 
     private void reqestRecipeStatus() {
@@ -106,25 +120,31 @@ public class Recipes extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.tvProducts:
                 //replacing the fragment
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, ProductsFragment.newInstance());
-                ft.commit();
+                replacceFragment(ProductsFragment.newInstance());
                 ((Navdrawer) getActivity()).getSupportActionBar().setTitle("Products");
                 break;
             case R.id.tvRecipies:
                 //replacing the fragment
-                ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, new RecipiesFragment());
-                ft.commit();
+                replacceFragment(new RecipiesFragment());
                 ((Navdrawer) getActivity()).getSupportActionBar().setTitle("Recipes");
                 break;
             case R.id.tvWhatsCooking:
                 //replacing the fragment
-                ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, new WatsCookingFragment());
-                ft.commit();
+                replacceFragment(new WatsCookingFragment());
                 ((Navdrawer) getActivity()).getSupportActionBar().setTitle("What's Cooking");
                 break;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void replacceFragment(Fragment fragment) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        String backStateName = fragment.getClass().getName();
+        ft.replace(R.id.content_frame, fragment).addToBackStack(backStateName);
+        ft.commit();
     }
 }

@@ -6,6 +6,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -47,7 +48,12 @@ public class RecipiesDetailsActivity extends AppCompatActivity {
         final p_MyCustomTextView_regular ingredients_des = (p_MyCustomTextView_regular) findViewById(R.id.ingredients_des);
 
         final p_MyCustomTextView_regular directions_des = (p_MyCustomTextView_regular) findViewById(R.id.directions_des);
-
+toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+     finish();
+    }
+});
 
         collapsingToolbar.setTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
