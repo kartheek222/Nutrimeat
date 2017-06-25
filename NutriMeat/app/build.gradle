@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'NutriMeat'
             keyPassword 'nutrimeat'
-            storeFile file('F:/Projects/updated/Nutrimeat/NutriMeat/keystore.jks')
+            storeFile file('/home/ramesh/AndroidStudioProjects/Nutrimate/keystore/keystore.jks')
             storePassword 'nutrimeat'
         }
     }
@@ -28,10 +28,14 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            buildConfigField "String", "MERCHANT_KEY", '"m3pWGL"'
+            buildConfigField "String", "SALT_KEY", '"znlhU3hxSE"'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
         debug{
+            buildConfigField "String", "MERCHANT_KEY", '"FyRoI7Tb"'
+            buildConfigField "String", "SALT_KEY", '"znlhU3hxSE"'
             minifyEnabled false
             signingConfig signingConfigs.config
         }
