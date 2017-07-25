@@ -2,6 +2,7 @@ package app.nutrimeat.meat.org.nutrimeat.drawer;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -15,6 +16,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import app.nutrimeat.meat.org.nutrimeat.Home.Ads;
 import app.nutrimeat.meat.org.nutrimeat.Home.StatsResponseModel;
 import app.nutrimeat.meat.org.nutrimeat.Navdrawer;
 import app.nutrimeat.meat.org.nutrimeat.R;
@@ -27,6 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -35,6 +47,11 @@ public class Recipes extends Fragment implements View.OnClickListener {
 
     private ProgressDialog progressDialog;
     private TextView tvDeliveryStatus, tvHappyCustomers, tvKilosSold;
+    private Handler mHandler = new Handler();
+    private static final long DELAY = 3000;
+    private ViewPager viewpager;
+    private ArrayList<Ads> mArrayListAds;
+    private HomePagerAdapter mHomeAdsAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,14 +59,41 @@ public class Recipes extends Fragment implements View.OnClickListener {
         setHasOptionsMenu(false);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mHandler.removeCallbacks(mRunnable);
+        mHandler.postDelayed(mRunnable, DELAY);
+    }
+
+
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            int currentItem = viewpager.getCurrentItem();
+
+            if (currentItem < viewpager.getChildCount() - 1) {
+                currentItem += 1;
+            } else if (currentItem == viewpager.getChildCount()) {
+                currentItem = 0;
+            }
+            viewpager.setCurrentItem(currentItem);
+            mHandler.postDelayed(mRunnable, DELAY);
+        }
+    };
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //returning our layout file
         //change R.layout.yourlayoutfilename for each of your fragments
         View view = inflater.inflate(R.layout.recipes_sample, container, false);
-        ViewPager viewpager = (ViewPager) view.findViewById(R.id.viewPager);
-        viewpager.setAdapter(new HomePagerAdapter(getChildFragmentManager()));
+        viewpager = (ViewPager) view.findViewById(R.id.viewPager);
+        mArrayListAds = new ArrayList<>();
+        mHomeAdsAdapter=new HomePagerAdapter(getChildFragmentManager(),mArrayListAds);
+        viewpager.setAdapter(mHomeAdsAdapter);
+
         view.findViewById(R.id.tvProducts).setOnClickListener(this);
         view.findViewById(R.id.tvRecipies).setOnClickListener(this);
         view.findViewById(R.id.tvWhatsCooking).setOnClickListener(this);
@@ -64,6 +108,8 @@ public class Recipes extends Fragment implements View.OnClickListener {
             tvKilosSold.setText(responseModel.getSold());
             tvHappyCustomers.setText(responseModel.getHappycustomers());
         }
+
+        getAds();
         return view;
     }
 
@@ -71,7 +117,52 @@ public class Recipes extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         getActivity().invalidateOptionsMenu();
-        ( (Navdrawer)getActivity()).setTitle("Home");
+        ((Navdrawer) getActivity()).setTitle("Home");
+    }
+
+
+    private void getAds() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(getString(R.string.api_url))
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+
+        API api = retrofit.create(API.class);
+        Call<String> responseCall = api.getAds();
+        responseCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                String responseStr = response.body();
+                if (responseStr != null) {
+                    JSONObject object = null;
+                    try {
+                        object = new JSONObject(responseStr);
+                        Iterator<String> keys = object.keys();
+                        for (; keys.hasNext(); ) {
+                            try {
+                                Ads ads = new Ads();
+                                JSONObject ad = object.getJSONObject(keys.next());
+                                ads.setImage(ad.getString("image"));
+                                ads.setText(ad.getString("text"));
+                                mArrayListAds.add(ads);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    mHomeAdsAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d("RESPONSE_Login", "onFailure: " + t.getMessage());
+                Toast.makeText(getApplicationContext(), "Internal error. Please Try Again", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void reqestRecipeStatus() {

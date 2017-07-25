@@ -36,6 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PREORDER_CART;
 import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PRODUCT_CART;
 
 
@@ -227,7 +228,7 @@ public class WatsCookingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((Navdrawer) getActivity()).updateHotCount(CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PRODUCT_CART));
+        ((Navdrawer) getActivity()).updateHotCount();
 
     }
 
@@ -240,9 +241,12 @@ public class WatsCookingFragment extends Fragment {
         txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
         // update menu
         final List<ModelCart> isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PRODUCT_CART);
-        if (isadd_to_cart != null) {
-            updateHotCount(isadd_to_cart);
+        if (isadd_to_cart.size()==0) {
+
+            isadd_to_cart.addAll(CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PREORDER_CART));
         }
+
+        updateHotCount(isadd_to_cart);
 
 
         notificaitons.setOnClickListener(new View.OnClickListener() {
@@ -280,7 +284,7 @@ public class WatsCookingFragment extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 List<ModelCart> isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PRODUCT_CART);
 //                updateHotCount(isadd_to_cart);
-                ((Navdrawer) getActivity()).updateHotCount(isadd_to_cart);
+                ((Navdrawer) getActivity()).updateHotCount();
                 adapter.notifyDataSetChanged();
                 Log.e("I'm Back", "third");
             }

@@ -34,6 +34,7 @@ import app.nutrimeat.meat.org.nutrimeat.product.ModelCart;
 import app.nutrimeat.meat.org.nutrimeat.product.Products;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PREORDER_CART;
 import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PRODUCT_CART;
 
 public class Navdrawer extends AppCompatActivity
@@ -127,11 +128,8 @@ public class Navdrawer extends AppCompatActivity
         final View notificaitons = menu.findItem(R.id.action_cart).getActionView();
 
         txtViewCount = (TextView) notificaitons.findViewById(R.id.txtCount);
-        // update menu
-        final List<ModelCart> isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(this, PREF_PRODUCT_CART);
-        if (isadd_to_cart != null) {
-            updateHotCount(isadd_to_cart);
-        }
+
+        updateHotCount();
 
         notificaitons.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,15 +142,20 @@ public class Navdrawer extends AppCompatActivity
         return true;
     }
 
-    public void updateHotCount(List<ModelCart> selc_products) {
-        if (selc_products != null) {
-            final int count = selc_products.size();
+    public void updateHotCount() {
+        // update menu
+        final List<ModelCart> isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(this, PREF_PRODUCT_CART);
+        if (isadd_to_cart != null && isadd_to_cart.size() == 0) {
+            List<ModelCart> list = CommonFunctions.getSharedPreferenceProductList(this, PREF_PREORDER_CART);
+            isadd_to_cart.addAll(list);
+        }
+        if (isadd_to_cart != null) {
+            final int count = isadd_to_cart.size();
             if (count == 0)
                 txtViewCount.setVisibility(View.GONE);
             else {
                 txtViewCount.setVisibility(View.VISIBLE);
                 txtViewCount.setText(Integer.toString(count));
-                // supportInvalidateOptionsMenu();
             }
         }
 

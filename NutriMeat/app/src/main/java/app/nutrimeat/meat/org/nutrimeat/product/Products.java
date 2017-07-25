@@ -59,7 +59,7 @@ public class Products extends Fragment {
         View rootview = inflater.inflate(R.layout.fragment_menu_products_specific, container, false);
         progressBar = (ProgressBar) rootview.findViewById(R.id.progressBar);
 //        setHasOptionsMenu(true);
-        String cat = getArguments().getString("cat");
+        final String cat = getArguments().getString("cat");
         final p_MyCustomTextView_mbold emptyview = (p_MyCustomTextView_mbold) rootview.findViewById(R.id.emptyview);
         final RecyclerView mRecycler = (RecyclerView) rootview.findViewById(R.id.products_rv);
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -91,7 +91,7 @@ public class Products extends Fragment {
                     for (int i = 0; i < products.size(); i++)
                         isadd_to_cart.add("true");
                     CommonFunctions.setSharedPreferenceStringList(getContext(), "isadd_to_cart", isadd_to_cart);
-                    adapter = new ProductAdapter(products, R.layout.product_item, Products.this, isadd_to_cart);
+                    adapter = new ProductAdapter(products, R.layout.product_item, Products.this, isadd_to_cart, cat);
                     mRecycler.setAdapter(adapter);
 
                 }
@@ -119,8 +119,7 @@ public class Products extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        ((Navdrawer) getActivity()).updateHotCount(CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PRODUCT_CART));
+        ((Navdrawer) getActivity()).updateHotCount();
     }
 
     @Override
@@ -177,8 +176,7 @@ public class Products extends Fragment {
         if (requestCode == 1) {
             Log.e("I'm Back", "secound");
             if (resultCode == Activity.RESULT_OK) {
-                List<ModelCart> isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PRODUCT_CART);
-                ((Navdrawer) getActivity()).updateHotCount(isadd_to_cart);
+                ((Navdrawer) getActivity()).updateHotCount();
                 adapter.notifyDataSetChanged();
                 Log.e("I'm Back", "third");
             }

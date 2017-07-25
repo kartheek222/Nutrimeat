@@ -50,6 +50,9 @@ public class CommonFunctions {
         Gson gson = new Gson();
         Type type = new TypeToken<List<ModelCart>>(){}.getType();
         List<ModelCart> products= gson.fromJson(json_string, type);
+        if(products==null){
+            products=new ArrayList<>();
+        }
         return products;
     }
 }

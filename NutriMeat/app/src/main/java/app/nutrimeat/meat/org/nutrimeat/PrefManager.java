@@ -18,6 +18,7 @@ public class PrefManager {
     // Shared preferences file name
     public static final String PREF_NAME = "Nutrimeat-welcome";
     public static final String PREF_PRODUCT_CART = "productsincart";
+    public static final String PREF_PREORDER_CART = "preordercart";
 
     public boolean getIsGuestLogin() {
         return pref.getBoolean(IS_GUEST_LOGIN, true);

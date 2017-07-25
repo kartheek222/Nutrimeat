@@ -12,6 +12,10 @@ public class Product_Model implements Serializable {
     private String item_name;
     @SerializedName("item_price")
     private double item_price;
+    @SerializedName("item_image")
+    private String item_image;
+    @SerializedName("item_cat")
+    private String item_cat;
 
     public Product_Model(int item_id, String item_name, double item_price, String item_image, String item_cat) {
         this.item_id = item_id;
@@ -41,9 +45,6 @@ public class Product_Model implements Serializable {
         this.item_id = item_id;
     }
 
-    @SerializedName("item_image")
-    private String item_image;
-
     public String getItem_cat() {
         return item_cat;
     }
@@ -63,8 +64,5 @@ public class Product_Model implements Serializable {
     public int getItem_id() {
         return item_id;
     }
-
-    @SerializedName("item_cat")
-    private String item_cat;
 
 }

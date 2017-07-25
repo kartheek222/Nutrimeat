@@ -36,8 +36,10 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginBottom="@dimen/dimen8"
+
                     android:background="@color/green"
                     android:padding="@dimen/dimen8"
+                    android:visibility="invisible"
                     android:text="status"
                     android:textColor="@color/white"
                     android:textSize="16sp" />

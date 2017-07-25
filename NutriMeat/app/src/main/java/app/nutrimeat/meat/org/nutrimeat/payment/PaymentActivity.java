@@ -5,25 +5,38 @@ package app.nutrimeat.meat.org.nutrimeat.payment;
  */
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.ecommerce.Product;
+import com.payu.custombrowser.Bank;
+import com.payu.custombrowser.CustomBrowser;
+import com.payu.custombrowser.PayUCustomBrowserCallback;
+import com.payu.custombrowser.PayUWebChromeClient;
+import com.payu.custombrowser.PayUWebViewClient;
+import com.payu.custombrowser.bean.CustomBrowserConfig;
+import com.payu.magicretry.MagicRetryFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.Charset;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import app.nutrimeat.meat.org.nutrimeat.BuildConfig;
 import app.nutrimeat.meat.org.nutrimeat.PrefManager;
@@ -38,61 +51,167 @@ public class PaymentActivity extends Activity {
     private String phoneofpayee;
     private Product productDetails;
     private PrefManager prefManager;
+//    private String url = "https://secure.payu.in/_payment";
+    private String url = "https://test.payu.in/_payment";//for testing
 
+
+    /**/
+    private static String transaction_Id = System.currentTimeMillis() + "";
+    private static String amount = "1.00 ";
+    private static String product_info = "Chicken";
+    private static String f_Name = "Ramesh";
+    private static String email = "sai.ramesh51@gmail.com";
+    private static String s_Url = "https://payu.herokuapp.com/success";
+    private static String f_Url = "https://payu.herokuapp.com/failure";
+    private static String user_credentials = BuildConfig.MERCHANT_KEY + ":" + "guru@guru.com";
+    private static String phone = "7893051914";
+    private static String udf1 = "";
+    private static String udf2 = "";
+    private static String udf3 = "";
+    private static String udf4 = "";
+    private static String udf5 = "";
+    //optional feilds for hash generation
+    private static String offer_key = " ";
+    private static String cardBin = " ";
+    private String postData = "";
+
+    /**/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.payment_activity);
+//        setContentView(R.layout.payment_activity);
 
-        Bundle bundle=getIntent().getExtras();
-        if(bundle!=null){
-            totalmaount=bundle.getString("amount");
-        }
-        prefManager = new PrefManager(this);
-        nameofpayee = prefManager.getName();   // user name
-        emailofpayee = prefManager.getEmail();    // email of the user
-        phoneofpayee = prefManager.getMobile();  //user phone number has to send
-        webviewPayment = (WebView) findViewById(R.id.webview);
-        webviewPayment.getSettings().setJavaScriptEnabled(true);
-        webviewPayment.getSettings().setDomStorageEnabled(true);
-        webviewPayment.getSettings().setLoadWithOverviewMode(true);
-        webviewPayment.getSettings().setUseWideViewPort(true);
-        webviewPayment.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        webviewPayment.getSettings().setSupportMultipleWindows(true);
-        webviewPayment.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        webviewPayment.addJavascriptInterface(new PayUJavaScriptInterface(), "PayUMoney");
-
-        StringBuilder url_s = new StringBuilder();
-
-        url_s.append("https://secure.payu.in/_payment");
-
-        Log.e(TAG, "call url " + url_s);
-
+        pay();
+//        Bundle bundle = getIntent().getExtras();
+//        if (bundle != null) {
+//            totalmaount = bundle.getString("amount");
+//        }
+//        prefManager = new PrefManager(this);
+//        nameofpayee = prefManager.getName();   // user name
+//        emailofpayee = prefManager.getEmail();    // email of the user
+//        phoneofpayee = prefManager.getMobile();  //user phone number has to send
+//        webviewPayment = (WebView) findViewById(R.id.webview);
+//        webviewPayment.getSettings().setJavaScriptEnabled(true);
+//        webviewPayment.getSettings().setDomStorageEnabled(true);
+//        webviewPayment.getSettings().setLoadWithOverviewMode(true);
+//        webviewPayment.getSettings().setUseWideViewPort(true);
+//        webviewPayment.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+//        webviewPayment.getSettings().setSupportMultipleWindows(true);
+//        webviewPayment.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+//        webviewPayment.addJavascriptInterface(new PayUJavaScriptInterface(), "PayUMoney");
+//
+//        StringBuilder url_s = new StringBuilder();
+//
+//        url_s.append("https://secure.payu.in/_payment");
+//
+//        Log.e(TAG, "call url " + url_s);
+//
 
         //  webviewPayment.postUrl(url_s.toString(),EncodingUtils.getBytes(getPostString(), "utf-8"));
 
-        webviewPayment.postUrl(url_s.toString(), getPostString().getBytes(Charset.forName("UTF-8")));
+//        webviewPayment.postUrl(url_s.toString(), getPostString().getBytes(Charset.forName("UTF-8")));
+//
+//        webviewPayment.setWebViewClient(new WebViewClient() {
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                super.onPageFinished(view, url);
+//            }
+//
+//            @SuppressWarnings("unused")
+//            public void onReceivedSslError(WebView view, SslErrorHandler handler) {
+//                Log.e("Error", "Exception caught!");
+//                handler.cancel();
+//            }
+//
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                view.loadUrl(url);
+//                return true;
+//            }
+//
+//        });
 
-        webviewPayment.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-            }
+        /*****************************************************************/
 
-            @SuppressWarnings("unused")
-            public void onReceivedSslError(WebView view, SslErrorHandler handler) {
-                Log.e("Error", "Exception caught!");
-                handler.cancel();
-            }
 
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
+//        initiatePayment();
 
-        });
+        /*****************************************************************/
+    }
+
+
+    private void setUpPay() {
+        CustomBrowserConfig customBrowserConfig = new CustomBrowserConfig(BuildConfig.MERCHANT_KEY, transaction_Id);
+        customBrowserConfig.setViewPortWideEnable(false);
+
+        //TODO don't forgot to set AutoApprove and AutoSelectOTP to true for One Tap payments
+        customBrowserConfig.setAutoApprove(false);
+        customBrowserConfig.setAutoSelectOTP(false);
+
+        //Set below flag to true to disable the default alert dialog of Custom Browser and use your custom dialog
+        customBrowserConfig.setDisableBackButtonDialog(false);
+
+        //Below flag is used for One Click Payments. It should always be set to CustomBrowserConfig.STOREONECLICKHASH_MODE_SERVER
+        customBrowserConfig.setStoreOneClickHash(CustomBrowserConfig.STOREONECLICKHASH_MODE_SERVER);
+
+        //Set it to true to enable run time permission dialog to appear for all Android 6.0 and above devices
+        customBrowserConfig.setMerchantSMSPermission(false);
+
+        //Set it to true to enable Magic retry
+        customBrowserConfig.setmagicRetry(true);
+
+        new CustomBrowser().addCustomBrowser(PaymentActivity.this, customBrowserConfig, payUCustomBrowserCallback);
+
+    }
+
+    private void initiatePayment() {
+        postData = "&txnid=" + transaction_Id +
+                "&device_type=1" +
+                "&ismobileview=1" +
+                "&productinfo=" + product_info +
+                "&user_credentials=" + user_credentials +
+                "&key=" + BuildConfig.MERCHANT_KEY +
+                "&instrument_type=Put here Device info " +
+                "&surl=" + s_Url +
+                "&furl=" + f_Url + "" +
+                "&instrument_id=7dd17561243c202" +
+                "&firstname=" + f_Name +
+                "&email=" + email +
+                "&phone=" + phone +
+                "&amount=" + amount +
+//                "&bankcode=PAYUW" + //for PayU Money
+//                "&pg=WALLET"+//for PayU Money
+                "&hash=";
+
+        MessageDigest digest = null;
+        String hash;
+        StringBuilder checkSumStr = new StringBuilder();
+        try {
+            digest = MessageDigest.getInstance("SHA-512");// MessageDigest.getInstance("SHA-256");
+            checkSumStr.append(BuildConfig.MERCHANT_KEY);
+            checkSumStr.append("|");
+            checkSumStr.append(transaction_Id);
+            checkSumStr.append("|");
+            checkSumStr.append(amount);
+            checkSumStr.append("|");
+            checkSumStr.append(product_info);
+            checkSumStr.append("|");
+            checkSumStr.append(f_Name);
+            checkSumStr.append("|");
+            checkSumStr.append(email);
+            checkSumStr.append("|||||||||||");
+            checkSumStr.append(BuildConfig.SALT_KEY);
+
+            digest.update(checkSumStr.toString().getBytes());
+
+            hash = bytesToHexString(digest.digest());
+            postData += hash;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private final class PayUJavaScriptInterface {
@@ -265,5 +384,202 @@ public class PaymentActivity extends Activity {
         return sb.toString();
     }
 
+
+    /****************************************************************************************************/
+
+
+    private PayUCustomBrowserCallback payUCustomBrowserCallback = new PayUCustomBrowserCallback() {
+
+        /**
+         * This method will be called after a failed transaction.
+         * @param  payuResponse response sent by PayU in App
+         * @param merchantResponse response received from Furl
+         * */
+        @Override
+        public void onPaymentFailure(String payuResponse, String merchantResponse) {
+
+            Intent intent = new Intent();
+            intent.putExtra(getString(R.string.cb_result), merchantResponse);
+            intent.putExtra(getString(R.string.cb_payu_response), payuResponse);
+            setResult(Activity.RESULT_CANCELED, intent);
+            finish();
+
+        }
+
+        @Override
+        public void onPaymentTerminate() {
+            finish();
+        }
+
+        /**
+         * This method will be called after a successful transaction.
+         * @param  payuResponse response sent by PayU in App
+         * @param merchantResponse response received from Furl
+         * */
+        @Override
+        public void onPaymentSuccess(String payuResponse, String merchantResponse) {
+            Intent intent = new Intent();
+            intent.putExtra(getString(R.string.cb_result), merchantResponse);
+            intent.putExtra(getString(R.string.cb_payu_response), payuResponse);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
+        }
+
+        @Override
+        public void onCBErrorReceived(int code, String errormsg) {
+        }
+
+        @Override
+        public void setCBProperties(WebView webview, Bank payUCustomBrowser) {
+            webview.setWebChromeClient(new PayUWebChromeClient(payUCustomBrowser));
+            webview.setWebViewClient(new PayUWebViewClient(payUCustomBrowser, BuildConfig.MERCHANT_KEY));
+            webview.postUrl("https://test.payu.in/_payment", postData.getBytes());
+        }
+
+        @Override
+        public void onBackApprove() {
+            PaymentActivity.this.finish();
+        }
+
+        @Override
+        public void onBackDismiss() {
+            super.onBackDismiss();
+        }
+
+        /**
+         * This callback method will be invoked when setDisableBackButtonDialog is set to true.
+         * @param alertDialogBuilder a reference of AlertDialog.Builder to customize the dialog
+         * */
+        @Override
+        public void onBackButton(AlertDialog.Builder alertDialogBuilder) {
+            super.onBackButton(alertDialogBuilder);
+        }
+
+        @Override
+        public void initializeMagicRetry(Bank payUCustomBrowser, WebView webview, MagicRetryFragment magicRetryFragment) {
+            webview.setWebViewClient(new PayUWebViewClient(payUCustomBrowser, magicRetryFragment, ""));
+            Map<String, String> urlList = new HashMap<String, String>();
+            urlList.put("https://test.payu.in/_payment", postData);
+            payUCustomBrowser.setMagicRetry(urlList);
+        }
+    };
+
+
+    private void pay() {
+        postData = "&txnid=" + transaction_Id +
+                "&device_type=1" +
+                "&ismobileview=1" +
+                "&productinfo=" + product_info +
+                "&user_credentials=" + user_credentials +
+                "&key=" + BuildConfig.MERCHANT_KEY +
+                "&instrument_type=Put here Device info " +
+                "&surl=" + s_Url +
+                "&furl=" + f_Url + "" +
+                "&instrument_id=7dd17561243c202" +
+                "&firstname=" + f_Name +
+                "&email=" + email +
+                "&phone=" + phone +
+                "&amount=" + amount +
+//                "&bankcode=PAYUW" + //for PayU Money
+//                "&pg=WALLET"+//for PayU Money
+                "&hash=";
+        generateHashFromServer();
+    }
+
+    public void generateHashFromServer() {
+
+        // lets create the post params
+
+        StringBuffer postParamsBuffer = new StringBuffer();
+        postParamsBuffer.append(concatParams("key", BuildConfig.MERCHANT_KEY));
+        postParamsBuffer.append(concatParams("amount", amount));
+        postParamsBuffer.append(concatParams("txnid", transaction_Id));
+        postParamsBuffer.append(concatParams("email", email));
+        postParamsBuffer.append(concatParams("productinfo", product_info));
+        postParamsBuffer.append(concatParams("firstname", f_Name));
+        postParamsBuffer.append(concatParams("udf1", udf1));
+        postParamsBuffer.append(concatParams("udf2", udf2));
+        postParamsBuffer.append(concatParams("udf3", udf3));
+        postParamsBuffer.append(concatParams("udf4", udf4));
+        postParamsBuffer.append(concatParams("udf5", udf5));
+        postParamsBuffer.append(concatParams("user_credentials", user_credentials));
+
+        // for offer_key(optional)
+        postParamsBuffer.append(concatParams("offer_key", offer_key));
+        // for check_isDomestic(oprional)
+        postParamsBuffer.append(concatParams("card_bin", cardBin));
+
+        String postParams = postParamsBuffer.charAt(postParamsBuffer.length() - 1) == '&' ? postParamsBuffer.substring(0, postParamsBuffer.length() - 1).toString() : postParamsBuffer.toString();
+        // make api call
+        GetHashesFromServerTask getHashesFromServerTask = new GetHashesFromServerTask();
+        getHashesFromServerTask.execute(postParams);
+
+    }
+
+    protected String concatParams(String key, String value) {
+        return key + "=" + value + "&";
+    }
+
+    class GetHashesFromServerTask extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... postParams) {
+
+            try {
+
+
+                URL url = new URL("https://payu.herokuapp.com/get_hash");//replace this url with your server url for hahs generation
+
+                // get the payuConfig first
+                String postParam = postParams[0];
+
+                byte[] postParamsByte = postParam.getBytes("UTF-8");
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                conn.setRequestProperty("Content-Length", String.valueOf(postParamsByte.length));
+                conn.setDoOutput(true);
+                conn.getOutputStream().write(postParamsByte);
+
+                InputStream responseInputStream = conn.getInputStream();
+                StringBuffer responseStringBuffer = new StringBuffer();
+                byte[] byteContainer = new byte[1024];
+                for (int i; (i = responseInputStream.read(byteContainer)) != -1; ) {
+                    responseStringBuffer.append(new String(byteContainer, 0, i));
+                }
+
+                JSONObject response = new JSONObject(responseStringBuffer.toString());
+                return response.getString("payment_hash");
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String payment_hash) {
+            postData=postData + payment_hash;
+            setUpPay();
+        }
+    }
+
+
+    /******************************************************************************************************/
 
 }

@@ -31,6 +31,7 @@
             android:text="Type"/>
 
         <RadioGroup
+            android:id="@+id/rdType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -41,7 +42,7 @@
                 android:id="@+id/radio_chicken"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+android:checked="true"
                 android:text="Chicken"/>
 
             <RadioButton
@@ -68,6 +69,9 @@
             android:id="@+id/edit_text_quantity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:singleLine="true"
+            android:lines="1"
             android:layout_weight="70"
             android:hint="Kgs"/>
     </LinearLayout>
@@ -91,6 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="70"
+            android:maxLines="5"
             android:hint="type your message here"/>
     </LinearLayout>
 
@@ -116,7 +121,7 @@
 
 
     <Button
-        android:id="@+id/signup"
+        android:id="@+id/btnSubmit"
         android:layout_width="250dp"
         android:layout_height="48dp"
         android:layout_marginBottom="16dp"

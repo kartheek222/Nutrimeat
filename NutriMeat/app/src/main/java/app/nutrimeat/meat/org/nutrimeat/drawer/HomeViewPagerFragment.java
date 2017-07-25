@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.squareup.picasso.Picasso;
+
 import app.nutrimeat.meat.org.nutrimeat.R;
 
 /**
@@ -16,10 +18,10 @@ import app.nutrimeat.meat.org.nutrimeat.R;
  */
 
 public class HomeViewPagerFragment extends Fragment {
-    public static HomeViewPagerFragment getInstance(int resourceId) {
+    public static HomeViewPagerFragment getInstance(String url) {
         HomeViewPagerFragment fragment = new HomeViewPagerFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("resourceId", resourceId);
+        bundle.putString("resourceId", url);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -29,7 +31,9 @@ public class HomeViewPagerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RelativeLayout v0 = (RelativeLayout) LayoutInflater.from(container.getContext()).inflate(R.layout.home_viewpager_item, container, false);
         ImageView imageView = (ImageView) v0.findViewById(R.id.photo_thumb);
-        imageView.setImageResource(getArguments().getInt("resourceId"));
+
+        String url=getArguments().getString("resourceId");
+        Picasso.with(getActivity()).load(url).error(R.drawable.ic_pager_scene1).into(imageView);
         return v0;
     }
 }

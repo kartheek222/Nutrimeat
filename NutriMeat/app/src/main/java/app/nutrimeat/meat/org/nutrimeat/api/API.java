@@ -4,6 +4,8 @@ import java.util.List;
 
 import app.nutrimeat.meat.org.nutrimeat.Account.Orders_Items_Response;
 import app.nutrimeat.meat.org.nutrimeat.Account.Orders_Model;
+import app.nutrimeat.meat.org.nutrimeat.Checkout.AddOrderItemResponse;
+import app.nutrimeat.meat.org.nutrimeat.Checkout.GenerateOrderNoResponse;
 import app.nutrimeat.meat.org.nutrimeat.Home.CheckAreaReponse;
 import app.nutrimeat.meat.org.nutrimeat.Home.StatsResponseModel;
 import app.nutrimeat.meat.org.nutrimeat.ProductDetails.Products_Details_Model;
@@ -13,6 +15,8 @@ import app.nutrimeat.meat.org.nutrimeat.WatsCooking.WatsCooking_Model;
 import app.nutrimeat.meat.org.nutrimeat.product.Product_Model;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -72,5 +76,44 @@ public interface API {
 
     @GET("main/stats")
     Call<StatsResponseModel> getStats();
+
+    @GET("main/ads")
+    Call<String> getAds();
+
+    @Headers("X-API-KEY:80w0g4o84wsc4gsc804c08scs00w8co4wscg848c")
+    @GET("main/order_number/format/json")
+    Call<GenerateOrderNoResponse> generateOrderNo();
+
+    @FormUrlEncoded
+    @Headers("X-API-KEY:80w0g4o84wsc4gsc804c08scs00w8co4wscg848c")
+    @POST("main/add_order_item/format/json")
+    Call<AddOrderItemResponse> addOrderItem(@Field("order_no") String orderNo, @Field("item_id") String itemId, @Field("item_name") String itemName, @Field("item_option") String itemOption, @Field("item_price") String itemPrice, @Field("item_weight") String itemWeight, @Field("item_note") String itemNote);
+
+    @Headers("X-API-KEY:80w0g4o84wsc4gsc804c08scs00w8co4wscg848c")
+    @POST("main/add_order/format/json")
+    Call<AddOrderItemResponse> addOrder(
+            @Field("order_no") String orderNo,
+            @Field("email") String email,
+            @Field("order_total_no_discount") int orderTotalDiscount,
+            @Field("discount_desc") String discountDesc,
+            @Field("discount_amount") float discountAmount,
+            @Field("order_total") int orderTotal,
+            @Field("items") int items,
+            @Field("total_weight") int totalWeight,
+            @Field("ord_status") int orderStatus,
+            @Field("ord_date_time") String orderDateTime,
+            @Field("ord_name") String orderName,
+            @Field("ord_address") String orderAddress,
+            @Field("ord_city") String orderCity,
+            @Field("ord_state") String orderState,
+            @Field("ord_country") String orderCountry,
+            @Field("ord_postal") String postal,
+            @Field("ord_store") String orderStore,
+            @Field("ord_phone") String phone,
+            @Field("ord_payment_mode") String paymentMode,
+            @Field("ord_type") String orderType,
+            @Field("ord_pre_date") String orderPreDate,
+            @Field("ord_pre_time") String orderPreTime,
+            @Field("ord_online_transaction") String onlineTransaction);
 
 }

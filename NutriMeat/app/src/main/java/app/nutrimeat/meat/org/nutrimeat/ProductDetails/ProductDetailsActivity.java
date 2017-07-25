@@ -37,6 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PREORDER_CART;
 import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PRODUCT_CART;
 
 public class ProductDetailsActivity extends AppCompatActivity implements View.OnClickListener {
@@ -49,6 +50,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     boolean product_exist;
     int q, d = 0;
     FloatingActionButton fab;
+    private boolean isPreOrder = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_product_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        isPreOrder = getIntent().getBooleanExtra("is_pre_order", false);
         product = (Product_Model) getIntent().getSerializableExtra("product");
         product_exist = (boolean) getIntent().getBooleanExtra("product_exist", false);
         model_in_cart = (ModelCart) getIntent().getSerializableExtra("model_in_cart");
@@ -85,7 +88,14 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             @Override
             public void onClick(View view) {
                 List<ModelCart> set_isadd_to_cart = new ArrayList<>();
-                List<ModelCart> isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PRODUCT_CART);
+
+                List<ModelCart> isadd_to_cart;
+
+                if (!isPreOrder) {
+                    isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PRODUCT_CART);
+                } else {
+                    isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PREORDER_CART);
+                }
                 if (isadd_to_cart == null) {
                     ModelCart modelCart_pojo = getmodel(products);
                     set_isadd_to_cart.add(modelCart_pojo);
@@ -106,7 +116,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                         Toast.makeText(getApplicationContext(), "Product added to cart", Toast.LENGTH_SHORT).show();
                     }
                 }
-                CommonFunctions.setSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PRODUCT_CART, set_isadd_to_cart);
+                if (!isPreOrder) {
+                    CommonFunctions.setSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PRODUCT_CART, set_isadd_to_cart);
+                } else {
+                    CommonFunctions.setSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PREORDER_CART, set_isadd_to_cart);
+                }
                 onBackPressed();
             }
         });
@@ -211,14 +225,25 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
     }
 
     private void updateshared() {
-        List<ModelCart> set_isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PRODUCT_CART);
+        List<ModelCart> set_isadd_to_cart;
+
+        if (!isPreOrder) {
+            set_isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PRODUCT_CART);
+        } else {
+            set_isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PREORDER_CART);
+
+        }
         ModelCart modelCart_pojo = getmodel(products);
         int get_pos = getpositonincart(set_isadd_to_cart, modelCart_pojo);
         if (get_pos != 0) {
             get_pos = get_pos - 1;
             set_isadd_to_cart.set(get_pos, modelCart_pojo);
         }
-        CommonFunctions.setSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PRODUCT_CART, set_isadd_to_cart);
+        if (!isPreOrder) {
+            CommonFunctions.setSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PRODUCT_CART, set_isadd_to_cart);
+        } else {
+            CommonFunctions.setSharedPreferenceProductList(ProductDetailsActivity.this, PREF_PREORDER_CART, set_isadd_to_cart);
+        }
     }
 
     private int getpositonincart(List<ModelCart> isadd_to_cart, ModelCart modelCart_pojo) {

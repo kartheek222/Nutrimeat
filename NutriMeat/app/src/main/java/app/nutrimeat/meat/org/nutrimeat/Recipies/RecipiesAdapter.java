@@ -12,14 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.payUMoney.sdk.BuildConfig;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import app.nutrimeat.meat.org.nutrimeat.Navdrawer;
 import app.nutrimeat.meat.org.nutrimeat.R;
-import app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_mbold;
 
 
 public class RecipiesAdapter extends RecyclerView.Adapter<RecipiesAdapter.ProductViewHolder> {

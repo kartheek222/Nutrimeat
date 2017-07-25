@@ -34,6 +34,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PREORDER_CART;
 import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PRODUCT_CART;
 
 
@@ -73,7 +74,7 @@ public class WatsCookingAdapter extends RecyclerView.Adapter<WatsCookingAdapter.
     @Override
     public WatsCookingAdapter.ProductViewHolder onCreateViewHolder(ViewGroup parent,
                                                                    int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, null, false);
         return new ProductViewHolder(view);
     }
 
@@ -85,6 +86,7 @@ public class WatsCookingAdapter extends RecyclerView.Adapter<WatsCookingAdapter.
                 .load("http://www.nutrimeat.in/assets/user/wc/" + products.get(position).getImage())
                 //  .resize(dp2px(220), 0)
                 .into(holder.product_image);
+        final List<ModelCart> preorderList = CommonFunctions.getSharedPreferenceProductList(context.getActivity(), PREF_PREORDER_CART);
         holder.item_name.setText(products.get(position).getName());
         holder.item_price.setText("Preparation time: " + String.valueOf(products.get(position).getPrep_time()));
         holder.item_price.setTextSize(12);
@@ -98,8 +100,11 @@ public class WatsCookingAdapter extends RecyclerView.Adapter<WatsCookingAdapter.
         holder.buynow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if(context instanceof WatsCookingFragment){
-                    ((WatsCookingFragment)context).add_product(products,position,serv_position);
+                    if(preorderList.size()==0) {
+                        ((WatsCookingFragment) context).add_product(products, position, serv_position);
+                    }
                 }
 
             }

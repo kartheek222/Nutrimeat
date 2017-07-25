@@ -159,7 +159,7 @@ public class RecipiesFragment extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 List<ModelCart> isadd_to_cart = CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PRODUCT_CART);
 //                updateHotCount(isadd_to_cart);
-                ((Navdrawer) getActivity()).updateHotCount(isadd_to_cart);
+                ((Navdrawer) getActivity()).updateHotCount();
                 adapter.notifyDataSetChanged();
                 Log.e("I'm Back", "third");
             }
@@ -169,6 +169,6 @@ public class RecipiesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((Navdrawer) getActivity()).updateHotCount(CommonFunctions.getSharedPreferenceProductList(getActivity(), PREF_PRODUCT_CART));
+        ((Navdrawer) getActivity()).updateHotCount();
     }
 }

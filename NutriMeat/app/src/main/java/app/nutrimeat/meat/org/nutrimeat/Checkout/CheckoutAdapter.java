@@ -23,6 +23,7 @@ import app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_mbold;
 import app.nutrimeat.meat.org.nutrimeat.Textview.p_MyCustomTextView_regular;
 import app.nutrimeat.meat.org.nutrimeat.product.ModelCart;
 
+import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PREORDER_CART;
 import static app.nutrimeat.meat.org.nutrimeat.PrefManager.PREF_PRODUCT_CART;
 
 
@@ -59,7 +60,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Produc
 
     @Override
     public ProductViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                int viewType) {
+                                                int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
         return new ProductViewHolder(view);
     }
@@ -137,11 +138,26 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.Produc
         return listofProdcuts.size();
     }
 
+    private boolean isPreorder() {
+        List<ModelCart> sharedPreferenceProductList = CommonFunctions.getSharedPreferenceProductList(context, PREF_PREORDER_CART);
+        if (sharedPreferenceProductList.size() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     public void removeAt(int position) {
-        listofProdcuts.remove(position);
+        if (listofProdcuts.size() > position)
+            listofProdcuts.remove(position);
         List<ModelCart> set_isadd_to_cart = new ArrayList<>();
         set_isadd_to_cart.addAll(listofProdcuts);
-        CommonFunctions.setSharedPreferenceProductList(context, PREF_PRODUCT_CART, set_isadd_to_cart);
+
+        if (isPreorder()) {
+            CommonFunctions.setSharedPreferenceProductList(context, PREF_PREORDER_CART, set_isadd_to_cart);
+        } else {
+            CommonFunctions.setSharedPreferenceProductList(context, PREF_PRODUCT_CART, set_isadd_to_cart);
+        }
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, listofProdcuts.size());
         context.price.remove(position);

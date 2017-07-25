@@ -4,11 +4,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import app.nutrimeat.meat.org.nutrimeat.AppConstants;
+
 /**
  * Created by Admin on 6/6/2017.
  */
 
-public class ProductsPagerAdapter extends FragmentPagerAdapter {
+public class ProductsPagerAdapter extends FragmentPagerAdapter implements AppConstants {
     public ProductsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -17,13 +19,13 @@ public class ProductsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return Products.newInstance("chicken");
+                return Products.newInstance(CHICKEN);
             case 1:
-                return Products.newInstance("mutton");
+                return Products.newInstance(MUTTON);
             case 2:
-                return Products.newInstance("sea foods");
+                return Products.newInstance(SEA_FOODS);
             case 3:
-                return Products.newInstance("others");
+                return Products.newInstance(OTHERS);
         }
         return null;
     }
