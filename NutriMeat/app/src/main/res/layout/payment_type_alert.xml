@@ -21,9 +21,29 @@
         android:layout_margin="20dp"
         android:fontFamily="@string/font_family_regular"
         android:gravity="center"
+        android:layout_marginTop="10dp"
         android:padding="10dp"
         android:text="@string/payment_type"
         android:textColor="@android:color/darker_gray"/>
+
+
+    <EditText
+        android:id="@+id/etDeliveryLocation"
+        android:layout_marginLeft="10dp"
+        android:hint="Enter delivery location"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:maxLines="4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etLandmark"
+        android:layout_marginLeft="10dp"
+        android:hint="Enter land mark"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         style="@style/match_wrap"

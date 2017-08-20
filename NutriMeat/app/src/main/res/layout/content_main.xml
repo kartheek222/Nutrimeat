@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/blur"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="app.nutrimeat.meat.org.nutrimeat.MainActivity"
-    tools:showIn="@layout/activity_main">
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:id="@+id/content_main"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:background="@drawable/blur"
+                                             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                                             tools:context="app.nutrimeat.meat.org.nutrimeat.MainActivity"
+                                             tools:showIn="@layout/activity_main">
 
     <TextView
         android:id="@+id/welcome"
@@ -26,7 +26,7 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
         android:id="@+id/email"
@@ -46,11 +46,10 @@
         android:ems="10"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
-        android:text="9652671871"
         android:textSize="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcome" />
+        app:layout_constraintTop_toBottomOf="@+id/welcome"/>
 
     <EditText
         android:id="@+id/password"
@@ -69,11 +68,10 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:text="9666181221"
         android:textSize="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        app:layout_constraintTop_toBottomOf="@+id/email"/>
 
     <CheckBox
         android:id="@+id/chRememberMe"
@@ -86,7 +84,7 @@
         android:text="Remember me"
         android:textSize="17sp"
         app:layout_constraintLeft_toLeftOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+        app:layout_constraintTop_toBottomOf="@+id/password"/>
 
     <Button
         android:id="@+id/login"
@@ -102,7 +100,7 @@
         android:textColor="#FFFFFF"
         app:layout_constraintLeft_toLeftOf="@+id/password"
         app:layout_constraintRight_toLeftOf="@+id/name"
-        app:layout_constraintTop_toBottomOf="@+id/chRememberMe" />
+        app:layout_constraintTop_toBottomOf="@+id/chRememberMe"/>
 
 
     <TextView
@@ -121,7 +119,7 @@
         android:textSize="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
+        app:layout_constraintTop_toBottomOf="@+id/name"/>
 
     <TextView
         android:id="@+id/or"
@@ -139,7 +137,7 @@
         android:textSize="25dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/forgotpassword" />
+        app:layout_constraintTop_toBottomOf="@+id/forgotpassword"/>
 
     <Button
         android:id="@+id/name"
@@ -152,7 +150,7 @@
         android:text="SIGN UP"
         android:textColor="#FFFFFF"
         app:layout_constraintRight_toRightOf="@+id/password"
-        app:layout_constraintTop_toBottomOf="@+id/chRememberMe" />
+        app:layout_constraintTop_toBottomOf="@+id/chRememberMe"/>
 
 
     <com.facebook.login.widget.LoginButton
@@ -167,9 +165,32 @@
         android:layout_marginTop="16dp"
         android:paddingBottom="15dp"
         android:paddingTop="15dp"
+        android:text="Login"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/or" />
+        app:layout_constraintTop_toBottomOf="@+id/or"/>
+
+    <Button
+        android:id="@+id/login_button_demo"
+        android:layout_width="250dp"
+        android:layout_height="47dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/com_facebook_button_background"
+        android:drawableLeft="@drawable/com_facebook_button_login_logo"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:drawablePadding="10dp"
+        android:text="Login with Facebook"
+        android:textColor="@android:color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_button"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_sign_in_button"
@@ -179,11 +200,11 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
-        android:visibility="gone"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+        app:layout_constraintTop_toBottomOf="@+id/login_button"/>
 
 
 </android.support.constraint.ConstraintLayout>

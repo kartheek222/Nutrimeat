@@ -246,8 +246,8 @@ public class TrackGPS extends Service implements LocationListener {
 
     public Location getCenterLocation() {
         Location location = new Location("");
-        location.setLatitude(51.5033640);
-        location.setLongitude(-0.1276250);
+        location.setLatitude(17.3478735);
+        location.setLongitude(78.5412692);
         return location;
     }
 

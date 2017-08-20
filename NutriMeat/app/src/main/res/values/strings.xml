@@ -126,6 +126,15 @@
     <string name="font_family_regular">sans-serif</string>
     <string-array name="chicken_types">
         <item>Whole Chicken Without Skin</item>
+        <item>Boneless Chicken</item>
+        <item>Chicken Curry Cut</item>
+        <item>Chicken Drumsticks</item>
+        <item>Chicken Mince (keema)</item>
+        <item>Chicken Whole Leg</item>
+    </string-array>
+<string-array name="mutton_types">
+        <item>Curry Cut</item>
+        <item>Boneless</item>
     </string-array>
 
     <string name="payment_type">Please select payment type</string>

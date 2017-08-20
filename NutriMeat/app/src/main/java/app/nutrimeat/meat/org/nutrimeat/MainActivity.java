@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
         welcome.setTypeface(welcomeFont);
         // Manually checking internet connection
         checkConnection();
+
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("public_profile email");
@@ -358,6 +359,13 @@ public class MainActivity extends AppCompatActivity implements ConnectivityRecei
                 AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
                 alertDialogAndroid.show();
 
+            }
+        });
+
+        findViewById(R.id.login_button_demo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loginButton.performClick();
             }
         });
 

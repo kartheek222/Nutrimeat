@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import app.nutrimeat.meat.org.nutrimeat.BuildConfig;
@@ -81,6 +84,10 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     private ProgressDialog progressDialog;
     private String orderNum;
     private List<ModelCart> cart_itens, updatedCartItems = new ArrayList<>();
+    private String deliveryLocation;
+    private String landmark;
+    private String orderType;
+    private String transactionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,20 +199,21 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
 
                     if (cart_itens != null && cart_itens.size() > 0) {
                         if (isPreorder()) {
-                            if (mCalendar.get(Calendar.HOUR_OF_DAY) >= 19 || mCalendar.get(Calendar.HOUR_OF_DAY) <= 8) {
-                                showPreOrderDiialog("Sorry! the items cannot be deliverd in between 7PM to 8AP. Please update the time");
+                            if (mCalendar.get(Calendar.HOUR_OF_DAY) >= 19 || mCalendar.get(Calendar.HOUR_OF_DAY) < 8) {
+                                showPreOrderDiialog("Sorry! the items cannot be delivered in between 7PM to 8AM. Please update the time");
                                 return;
                             }
                             long diff = mCalendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
                             long day = 24 * 60 * 60 * 1000;
                             if (diff > day) {
-                                navigateToPayU();
+//                                navigateToPayU();
+                                showDialog();
                             } else {
                                 Toast.makeText(this, "Please select valid date", Toast.LENGTH_SHORT).show();
                             }
 
                         } else {
-                            if (mCalendar.get(Calendar.HOUR_OF_DAY) >= 19 || mCalendar.get(Calendar.HOUR_OF_DAY) <= 8) {
+                            if (mCalendar.get(Calendar.HOUR_OF_DAY) >= 19 || mCalendar.get(Calendar.HOUR_OF_DAY) < 8) {
                                 showPreOrderDiialog("Store is closed now. You can Pre-Order");
                                 return;
                             }
@@ -222,9 +230,12 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
             case R.id.textview_date:
-                new DatePickerDialog(this, date, mCalendar
-                        .get(Calendar.YEAR), mCalendar.get(Calendar.MONTH),
-                        mCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                Calendar calendar=Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this, date, calendar
+                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        (calendar.get(Calendar.DAY_OF_MONTH) + 1));
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                datePickerDialog.show();
 
                 break;
             case R.id.textview_time:
@@ -251,6 +262,7 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
             mCalendar.set(Calendar.YEAR, year);
             mCalendar.set(Calendar.MONTH, monthOfYear);
             mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
             mTextViewDate.setText(getDate(mCalendar));
         }
 
@@ -342,21 +354,38 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
     private void showDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
         final View dialogView = inflater.inflate(R.layout.payment_type_alert, null);
+        final EditText etLandmark = (EditText) dialogView.findViewById(R.id.etLandmark);
+        final EditText etDeliveryLocation = (EditText) dialogView.findViewById(R.id.etDeliveryLocation);
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(dialogView);
         dialog.findViewById(R.id.textview_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateOrderStatus();
-                dialog.dismiss();
+                String deliveryLocationStr = etDeliveryLocation.getText().toString().trim();
+                String landmarkStr = etDeliveryLocation.getText().toString().trim();
+                if (TextUtils.isEmpty(deliveryLocationStr)) {
+                    etDeliveryLocation.setError("Delivery location can't be empty");
+                    etDeliveryLocation.requestFocus();
+                } else if (TextUtils.isEmpty(landmarkStr)) {
+                    etLandmark.setError("Landmark can't be empty");
+                    etLandmark.requestFocus();
+                }else{
+                     deliveryLocation = etDeliveryLocation.getText().toString().trim();
+                    landmark = etDeliveryLocation.getText().toString().trim();
+                    orderType = "Cash On Delivery";
+                    dialog.dismiss();
+                    updateOrderStatus();
+
+                }
             }
         });
         dialog.findViewById(R.id.textview_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigateToPayU();
+                orderType = "Standard";
                 dialog.dismiss();
+                navigateToPayU();
             }
         });
         dialog.show();
@@ -414,11 +443,13 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
             addOrderItemCall.enqueue(new Callback<AddOrderItemResponse>() {
                 @Override
                 public void onResponse(Call<AddOrderItemResponse> call, Response<AddOrderItemResponse> response) {
+                    showProgressDialog(false);
                     addItemsToOrder();
                 }
 
                 @Override
                 public void onFailure(Call<AddOrderItemResponse> call, Throwable t) {
+                    showProgressDialog(false);
                     showErrorDialog();
                 }
             });
@@ -436,20 +467,33 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         API api = retrofit.create(API.class);
         CheckUser checkUser = new CheckUser();
         PrefManager prefManager = new PrefManager(this);
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String orderTime = dateFormat.format(new Date());
         Call<AddOrderItemResponse> addOrderItemCall = api.addOrder(orderNum, prefManager.getEmail(), 0,
-                "", 0, cart_itens.size(), 0, 0, 0, "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                "", 0, checkoutAdapter.getSub_total(), cart_itens.size(), 0, 1, orderTime, prefManager.getName(), deliveryLocation,
+                "Hyderabad", "Telangana", "India", "",
+                "", prefManager.getMobile(),
+                 orderTime,"standard", getDate(mCalendar),
+                getTime(mCalendar), "");
 //                                    progressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...", "Validating Password...", true, false);
         addOrderItemCall.enqueue(new Callback<AddOrderItemResponse>() {
             @Override
             public void onResponse(Call<AddOrderItemResponse> call, Response<AddOrderItemResponse> response) {
-                CommonFunctions.getSharedPreferenceProductList(CheckoutActivity.this, PREF_PRODUCT_CART).clear();
-                CommonFunctions.getSharedPreferenceProductList(CheckoutActivity.this, PREF_PREORDER_CART
-                ).clear();
-                finish();
+                showProgressDialog(false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(CheckoutActivity.this);
+                builder.setMessage("Your request has been placed").setCancelable(false).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        CommonFunctions.setSharedPreferenceProductList(CheckoutActivity.this, PREF_PRODUCT_CART,new ArrayList<ModelCart>());
+                        CommonFunctions.setSharedPreferenceProductList(CheckoutActivity.this, PREF_PREORDER_CART,new ArrayList<ModelCart>());
+                        finish();
+                    }
+                }).show();
             }
 
             @Override
             public void onFailure(Call<AddOrderItemResponse> call, Throwable t) {
+                showProgressDialog(false);
                 showErrorDialog();
             }
         });
@@ -468,7 +512,7 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setMessage("Loading . . . ");
         }
-        if (canDShowDialog) {
+        if (!canDShowDialog) {
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
@@ -573,7 +617,10 @@ public class CheckoutActivity extends AppCompatActivity implements View.OnClickL
         if (requestCode == 100) {
             if (resultCode == RESULT_OK) {
                 //update order status api
+                transactionId= "";
+                updateOrderStatus();
             } else {
+                showErrorDialog();
                 //todo call cancel order api
             }
         }

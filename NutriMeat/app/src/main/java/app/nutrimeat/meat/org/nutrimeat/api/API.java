@@ -89,6 +89,7 @@ public interface API {
     @POST("main/add_order_item/format/json")
     Call<AddOrderItemResponse> addOrderItem(@Field("order_no") String orderNo, @Field("item_id") String itemId, @Field("item_name") String itemName, @Field("item_option") String itemOption, @Field("item_price") String itemPrice, @Field("item_weight") String itemWeight, @Field("item_note") String itemNote);
 
+    @FormUrlEncoded
     @Headers("X-API-KEY:80w0g4o84wsc4gsc804c08scs00w8co4wscg848c")
     @POST("main/add_order/format/json")
     Call<AddOrderItemResponse> addOrder(
@@ -97,7 +98,7 @@ public interface API {
             @Field("order_total_no_discount") int orderTotalDiscount,
             @Field("discount_desc") String discountDesc,
             @Field("discount_amount") float discountAmount,
-            @Field("order_total") int orderTotal,
+            @Field("order_total") double orderTotal,
             @Field("items") int items,
             @Field("total_weight") int totalWeight,
             @Field("ord_status") int orderStatus,
